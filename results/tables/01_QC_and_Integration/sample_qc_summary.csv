@@ -1,0 +1,7 @@
+sample_id,group,cells_before_QC,cells_after_QC,cells_removed,pct_removed
+AP-300,APAP,5270,5184,86,1.63
+AP-300-2,APAP,22486,22366,120,0.53
+AP-300-3,APAP,20623,19512,1111,5.39
+con1,Control,4833,4794,39,0.81
+con2,Control,20417,19738,679,3.33
+con3,Control,18386,16466,1920,10.44
