@@ -1,0 +1,21 @@
+# Local operating-system files
+.DS_Store
+
+# Local agent/project steering file
+AGENTS.md
+
+# Raw and processed data are kept out of Git.
+# Keep only explicit directory placeholders under data/.
+data/**
+!data/
+!data/**/
+!data/**/.gitkeep
+
+# Runtime logs and temporary files
+*.log
+*.tmp
+*.Rhistory
+*.RData
+
+# RStudio local project state
+.Rproj.user/
