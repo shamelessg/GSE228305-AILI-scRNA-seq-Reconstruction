@@ -1,0 +1,23 @@
+celltype,W_stat,p_value,mean_ctrl,mean_apap,direction
+Activated neutrophil,8,0.1904,0.004,0.0099,Up in APAP
+B cell,4,1,0.171,0.1688,Down in APAP
+B cell / possible doublet,3,0.6625,0.0054,0.0028,Down in APAP
+Cholangiocyte / epithelial,5,1,0.0623,0.0751,Up in APAP
+Cycling cell,7,0.3827,0.0219,0.0351,Up in APAP
+Cytotoxic T / NK-like,6,0.6625,0.0324,0.0344,Up in APAP
+Endothelial,3,0.6625,0.0714,0.0377,Down in APAP
+Fibroblast / stellate,4,1,0.0033,0.0057,Up in APAP
+Hepatocyte contamination,2,0.3827,0.0819,0.0243,Down in APAP
+Inflammatory neutrophil,7,0.3827,0.0415,0.0979,Up in APAP
+Kupffer cell,5,1,0.0167,0.0224,Up in APAP
+Low-quality / mixed,3,0.6625,0.0543,0.0411,Down in APAP
+Mast / basophil-like,7,0.3827,0.0034,0.0057,Up in APAP
+Mesothelial,5,1,0.0301,0.0321,Up in APAP
+Monocyte-derived macrophage / DC-like,6,0.6625,0.0351,0.0617,Up in APAP
+NK cell,6,0.6625,0.0525,0.0594,Up in APAP
+Neutrophil,9,0.0809,0.0039,0.0122,Up in APAP
+Plasma cell,2,0.3827,0.0172,0.0128,Down in APAP
+T cell,3,0.6625,0.2434,0.1912,Down in APAP
+VSMC / pericyte,4,1,0.0093,0.0062,Down in APAP
+cDC1,7,0.3827,0.0134,0.0244,Up in APAP
+pDC-like,6,0.6625,0.0256,0.0395,Up in APAP

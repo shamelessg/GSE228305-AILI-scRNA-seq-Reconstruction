@@ -1,0 +1,133 @@
+sample_id,group,celltype_manual,n_cells
+AP-300,APAP,Activated neutrophil,48
+AP-300,APAP,B cell,421
+AP-300,APAP,B cell / possible doublet,9
+AP-300,APAP,Cholangiocyte / epithelial,570
+AP-300,APAP,Cycling cell,337
+AP-300,APAP,Cytotoxic T / NK-like,231
+AP-300,APAP,Endothelial,223
+AP-300,APAP,Fibroblast / stellate,61
+AP-300,APAP,Hepatocyte contamination,162
+AP-300,APAP,Inflammatory neutrophil,171
+AP-300,APAP,Kupffer cell,204
+AP-300,APAP,Low-quality / mixed,75
+AP-300,APAP,Mast / basophil-like,57
+AP-300,APAP,Mesothelial,167
+AP-300,APAP,Monocyte-derived macrophage / DC-like,601
+AP-300,APAP,NK cell,198
+AP-300,APAP,Neutrophil,100
+AP-300,APAP,Plasma cell,123
+AP-300,APAP,T cell,806
+AP-300,APAP,VSMC / pericyte,44
+AP-300,APAP,cDC1,234
+AP-300,APAP,pDC-like,342
+AP-300-2,APAP,Activated neutrophil,305
+AP-300-2,APAP,B cell,4908
+AP-300-2,APAP,B cell / possible doublet,105
+AP-300-2,APAP,Cholangiocyte / epithelial,811
+AP-300-2,APAP,Cycling cell,465
+AP-300-2,APAP,Cytotoxic T / NK-like,690
+AP-300-2,APAP,Endothelial,618
+AP-300-2,APAP,Fibroblast / stellate,46
+AP-300-2,APAP,Hepatocyte contamination,619
+AP-300-2,APAP,Inflammatory neutrophil,3206
+AP-300-2,APAP,Kupffer cell,225
+AP-300-2,APAP,Low-quality / mixed,528
+AP-300-2,APAP,Mast / basophil-like,98
+AP-300-2,APAP,Mesothelial,425
+AP-300-2,APAP,Monocyte-derived macrophage / DC-like,850
+AP-300-2,APAP,NK cell,1771
+AP-300-2,APAP,Neutrophil,196
+AP-300-2,APAP,Plasma cell,139
+AP-300-2,APAP,T cell,5229
+AP-300-2,APAP,VSMC / pericyte,118
+AP-300-2,APAP,cDC1,362
+AP-300-2,APAP,pDC-like,652
+AP-300-3,APAP,Activated neutrophil,130
+AP-300-3,APAP,B cell,4012
+AP-300-3,APAP,B cell / possible doublet,38
+AP-300-3,APAP,Cholangiocyte / epithelial,1543
+AP-300-3,APAP,Cycling cell,378
+AP-300-3,APAP,Cytotoxic T / NK-like,540
+AP-300-3,APAP,Endothelial,826
+AP-300-3,APAP,Fibroblast / stellate,64
+AP-300-3,APAP,Hepatocyte contamination,272
+AP-300-3,APAP,Inflammatory neutrophil,2288
+AP-300-3,APAP,Kupffer cell,347
+AP-300-3,APAP,Low-quality / mixed,1660
+AP-300-3,APAP,Mast / basophil-like,35
+AP-300-3,APAP,Mesothelial,878
+AP-300-3,APAP,Monocyte-derived macrophage / DC-like,606
+AP-300-3,APAP,NK cell,1186
+AP-300-3,APAP,Neutrophil,166
+AP-300-3,APAP,Plasma cell,166
+AP-300-3,APAP,T cell,3595
+AP-300-3,APAP,VSMC / pericyte,92
+AP-300-3,APAP,cDC1,233
+AP-300-3,APAP,pDC-like,457
+con1,Control,Activated neutrophil,39
+con1,Control,B cell,760
+con1,Control,B cell / possible doublet,8
+con1,Control,Cholangiocyte / epithelial,251
+con1,Control,Cycling cell,182
+con1,Control,Cytotoxic T / NK-like,215
+con1,Control,Endothelial,66
+con1,Control,Fibroblast / stellate,19
+con1,Control,Hepatocyte contamination,90
+con1,Control,Inflammatory neutrophil,106
+con1,Control,Kupffer cell,61
+con1,Control,Low-quality / mixed,135
+con1,Control,Mast / basophil-like,35
+con1,Control,Mesothelial,132
+con1,Control,Monocyte-derived macrophage / DC-like,258
+con1,Control,NK cell,265
+con1,Control,Neutrophil,32
+con1,Control,Plasma cell,150
+con1,Control,T cell,1661
+con1,Control,VSMC / pericyte,83
+con1,Control,cDC1,102
+con1,Control,pDC-like,144
+con2,Control,Activated neutrophil,49
+con2,Control,B cell,5039
+con2,Control,B cell / possible doublet,196
+con2,Control,Cholangiocyte / epithelial,751
+con2,Control,Cycling cell,382
+con2,Control,Cytotoxic T / NK-like,523
+con2,Control,Endothelial,864
+con2,Control,Fibroblast / stellate,65
+con2,Control,Hepatocyte contamination,2037
+con2,Control,Inflammatory neutrophil,906
+con2,Control,Kupffer cell,301
+con2,Control,Low-quality / mixed,1306
+con2,Control,Mast / basophil-like,33
+con2,Control,Mesothelial,488
+con2,Control,Monocyte-derived macrophage / DC-like,623
+con2,Control,NK cell,1000
+con2,Control,Neutrophil,63
+con2,Control,Plasma cell,197
+con2,Control,T cell,4165
+con2,Control,VSMC / pericyte,92
+con2,Control,cDC1,224
+con2,Control,pDC-like,434
+con3,Control,Activated neutrophil,25
+con3,Control,B cell,1634
+con3,Control,B cell / possible doublet,78
+con3,Control,Cholangiocyte / epithelial,1591
+con3,Control,Cycling cell,140
+con3,Control,Cytotoxic T / NK-like,426
+con3,Control,Endothelial,2578
+con3,Control,Fibroblast / stellate,42
+con3,Control,Hepatocyte contamination,2035
+con3,Control,Inflammatory neutrophil,931
+con3,Control,Kupffer cell,363
+con3,Control,Low-quality / mixed,1127
+con3,Control,Mast / basophil-like,22
+con3,Control,Mesothelial,625
+con3,Control,Monocyte-derived macrophage / DC-like,328
+con3,Control,NK cell,849
+con3,Control,Neutrophil,28
+con3,Control,Plasma cell,171
+con3,Control,T cell,2842
+con3,Control,VSMC / pericyte,96
+con3,Control,cDC1,127
+con3,Control,pDC-like,408

@@ -192,11 +192,17 @@ print(res_summary)
 # =========================================================================
 # MANUAL_REVIEW #1 — Cluster resolution
 # =========================================================================
-# TEMPORARY DEFAULT: resolution = 0.4
-# Review the UMAP plots for each resolution (umap_res_0.2.pdf, etc.)
-# and the resolution_summary.csv table.  Choose the resolution that gives
-# biologically interpretable clusters without over-fragmentation.
-# Then update DEFAULT_RES below and re-run from this section.
+# Resolution 0.4 is a MANUAL preliminary choice for coarse global annotation.
+# It is NOT an algorithmic optimum — it balances interpretable cluster numbers
+# (27 clusters) against over-fragmentation.
+# Resolution summary (informational):
+#   0.2 = 21 clusters
+#   0.4 = 27 clusters  <-- current choice
+#   0.6 = 34 clusters
+#   0.8 = 39 clusters
+# If subsequent DotPlot / FeaturePlot / marker review reveals over-merging
+# (e.g., distinct cell types collapsed into one cluster), re-evaluate at
+# resolution 0.6 and update DEFAULT_RES accordingly.
 # =========================================================================
 
 DEFAULT_RES <- 0.4
@@ -223,26 +229,66 @@ message("Saved: umap_by_cluster.pdf")
 # C. Global marker identification
 # -------------------------------------------------------------------------
 
-message("Running FindAllMarkers (this may take several minutes for ~88k cells)...")
-
 # Seurat v5: join sample-level layers before DE testing
 merged <- JoinLayers(merged)
 
-all_markers <- FindAllMarkers(
-  merged,
-  only.pos       = TRUE,
-  min.pct        = 0.25,
-  logfc.threshold = 0.25,
-  test.use       = "wilcox"
-)
-gc()
+# --- Marker identification: try presto first, fall back to Seurat ---
+# presto::wilcoxauc() is orders of magnitude faster than Seurat::FindAllMarkers()
+# for large datasets.  We try it first; if unavailable, we fall back to the
+# standard Seurat Wilcoxon test.
 
-# Full table
+presto_available <- requireNamespace("presto", quietly = TRUE)
+
+if (presto_available) {
+  message("Using presto::wilcoxauc() for fast marker detection ...")
+  library(presto)
+
+  # Input: log-normalised data matrix + cluster assignments
+  expr_mat  <- GetAssayData(merged, assay = "RNA", layer = "data")
+  clust_vec <- as.character(merged$seurat_clusters)
+
+  presto_raw <- wilcoxauc(expr_mat, clust_vec)
+  gc()
+
+  # Save raw presto output (full table with AUC)
+  write_csv(presto_raw, file.path(TAB_DIR, "global_cluster_markers_presto.csv"))
+  message("Saved: global_cluster_markers_presto.csv (", nrow(presto_raw), " rows)")
+
+  # Format to Seurat-like marker table (positive LFC, padj < 0.05, logFC > 0.25)
+  all_markers <- presto_raw %>%
+    filter(padj < 0.05, logFC > 0.25) %>%
+    rename(
+      cluster    = group,
+      gene       = feature,
+      avg_log2FC = logFC,
+      p_val_adj  = padj,
+      p_val      = pval,
+      pct.1      = pct_in,
+      pct.2      = pct_out
+    ) %>%
+    select(cluster, gene, p_val, avg_log2FC, pct.1, pct.2, p_val_adj, auc)
+
+  message("presto markers after filtering: ", nrow(all_markers), " rows")
+
+} else {
+  message("presto not available, falling back to Seurat::FindAllMarkers() ...")
+
+  all_markers <- FindAllMarkers(
+    merged,
+    only.pos       = TRUE,
+    min.pct        = 0.25,
+    logfc.threshold = 0.25,
+    test.use       = "wilcox"
+  )
+  gc()
+}
+
+# Full table (from whichever method was used)
 write_csv(all_markers, file.path(TAB_DIR, "global_cluster_markers.csv"))
 message("Saved: global_cluster_markers.csv (", nrow(all_markers), " rows)")
 
 if (nrow(all_markers) == 0) {
-  stop("FindAllMarkers returned 0 rows. Check JoinLayers and assay setup.")
+  stop("Marker detection returned 0 rows. Check JoinLayers and assay setup.")
 }
 
 # Top markers per cluster (top 20 by avg_log2FC)
@@ -278,19 +324,23 @@ message("Saved: dotplot_top5_per_cluster.pdf")
 
 # Canonical marker sets for mouse liver non-parenchymal cells
 canonical_markers <- list(
-  "Macrophage / Kupffer" = c("Adgre1", "C1qa", "C1qb", "C1qc", "Lyz2",
-                              "Cd68", "Marco", "Vsig4"),
-  "Monocyte / Inflammatory Mph" = c("Ly6c2", "S100a8", "S100a9", "Ccr2",
-                                     "Lyz2", "Itgam"),
-  "Neutrophil"           = c("S100a8", "S100a9", "Retnlg", "Mpo", "Cxcr2"),
-  "Endothelial"          = c("Pecam1", "Kdr", "Cdh5", "Vwf", "Lyve1", "Stab2"),
-  "Stellate / Fibroblast" = c("Col1a1", "Col1a2", "Dcn", "Lum", "Acta2"),
-  "T cell"               = c("Cd3d", "Cd3e", "Trac", "Cd4", "Cd8a"),
-  "NK cell"              = c("Nkg7", "Klrb1c", "Gzmb", "Prf1"),
-  "B cell"               = c("Ms4a1", "Cd79a", "Cd79b", "Bank1"),
-  "Plasma cell"          = c("Jchain", "Mzb1", "Xbp1"),
-  "Cycling"              = c("Mki67", "Top2a", "Stmn1"),
-  "Hepatocyte"           = c("Alb", "Apoa1", "Ttr")
+  "T cell"                = c("Cd3d", "Cd3e", "Trac", "Cd4", "Cd8a", "Lef1", "Tcf7", "Il7r"),
+  "B cell"                = c("Ms4a1", "Cd79a", "Cd79b", "Bank1", "Pax5", "Fcer2a", "Ighd"),
+  "NK cell"               = c("Ncr1", "Nkg7", "Klrb1c", "Gzma", "Gzmb", "Prf1", "Xcl1", "Klra9"),
+  "Neutrophil"            = c("S100a8", "S100a9", "Mpo", "Cxcr2", "Csf3r", "Ltf", "Camp", "Ngp", "Cd177", "Ly6g"),
+  "Endothelial"           = c("Pecam1", "Kdr", "Cdh5", "Lyve1", "Stab2", "Robo4", "Mmrn2", "Ptprb", "Thbd", "Nos3"),
+  "Kupffer cell"          = c("Cd5l", "Clec4f", "Folr2", "Fcna", "Cd163", "Vsig4", "C6", "Adgre1", "C1qa"),
+  "Monocyte-derived Mph/DC" = c("Cx3cr1", "Lyz2", "Fcgr1", "Clec4b1", "Ms4a6c", "Cd209a", "Clec4a3"),
+  "Cholangiocyte / Epithelial" = c("Epcam", "Krt8", "Krt18", "Krt19", "Sox9", "Dmbt1"),
+  "Hepatocyte"            = c("Alb", "Apoa1", "Ttr", "Hnf4a"),
+  "Fibroblast / Stellate" = c("Col1a1", "Col1a2", "Dcn", "Lum", "Dpep1", "Dpt", "Pdgfra", "Tcf21", "Mmp2"),
+  "Mesothelial"           = c("Msln", "Muc16", "Upk3b", "Rspo1"),
+  "Plasma cell"           = c("Jchain", "Mzb1", "Xbp1", "Tnfrsf17", "Igha"),
+  "pDC"                   = c("Siglech", "Ccr9", "Flt3", "Cd300c"),
+  "cDC1"                  = c("Xcr1", "Clec9a", "Flt3", "Itgax"),
+  "Cycling"               = c("Mki67", "Top2a", "Stmn1", "Pclaf", "Ccna2", "Hist1h3c"),
+  "Mast / Basophil"       = c("Cpa3", "Gata2", "Kit", "Prtn3"),
+  "VSMC / Pericyte"       = c("Lmod1", "Cnn1", "Myh11", "Tagln")
 )
 
 # --- Preliminary annotation by marker enrichment ---
@@ -308,6 +358,9 @@ avg_expr <- AverageExpression(
   slot         = "data"
 )[["RNA"]]  # genes x clusters matrix
 avg_expr <- as.matrix(avg_expr)
+
+# Strip "g" prefix that Seurat v5 AverageExpression adds to numeric cluster names
+colnames(avg_expr) <- gsub("^g", "", colnames(avg_expr))
 
 # Score each cluster for each cell type (mean expression of marker genes present in data)
 cluster_ids <- colnames(avg_expr)
@@ -346,35 +399,119 @@ print(prelim_df)
 # =========================================================================
 # MANUAL_REVIEW #2 — Cell-type annotation
 # =========================================================================
-# The preliminary annotation above is COMPUTATIONAL ONLY.
-# You MUST review it against:
-#   1. global_cluster_markers.csv — full DEG table per cluster
-#   2. dotplot_top5_per_cluster.pdf — expression pattern of top markers
-#   3. dotplot_canonical_markers.pdf — expression of canonical markers
-#   4. featureplot_key_markers.pdf — spatial distribution of markers on UMAP
-#   5. umap_by_cluster.pdf — cluster positions on UMAP
+# The manual annotation below is based on manual review of:
+#   1. global_cluster_markers.csv (or global_cluster_markers_presto.csv)
+#   2. dotplot_top5_per_cluster.pdf
+#   3. dotplot_canonical_markers.pdf
+#   4. featureplot_key_markers*.pdf
+#   5. umap_by_cluster.pdf
 #
-# After review, fill in the manual_cluster_annotation vector below.
-# Use "Unknown" for clusters you cannot confidently assign.
+# Each label is assigned by inspecting cluster-enriched genes against known
+# mouse liver NPC markers.  Key marker evidence is noted inline.
+# Labels marked "uncertain" require further validation (DotPlot / FeaturePlot
+# re-check), and some may be revised after subclustering in Stage 3.
+#
+# NOTE: This is a manual first-pass annotation — NOT a computational
+#       assignment.  Do NOT replace with automatic scoring output.
 # =========================================================================
 
-# --- MANUAL ANNOTATION TABLE (EDIT AFTER REVIEW) ---
-# For now, the preliminary labels are used as a starting point.
-# Replace the right-hand side with your final labels after reviewing outputs.
-manual_cluster_annotation <- setNames(
-  prelim_df$preliminary_label,
-  prelim_df$cluster
+# --- Manual cluster annotation (resolution = 0.4, 27 clusters) ---
+# Key marker rationale per cluster:
+#
+#  0  — T cell:
+#       Lef1, Tcf7, Il7r, Trac, Cd28  => naive / conventional T cell
+#  1  — B cell:
+#       Pax5, Ms4a1, Cd79a, Cd79b, Fcer2a, Bank1
+#  2  — Inflammatory neutrophil:
+#       Cxcr2, Il1f9, Acod1, Ptgs2, Cxcl2, S100a8/S100a9 signal
+#  3  — NK cell:
+#       Ncr1, Klra9, Klrb1b, Gzma, Prf1, Gzmb, Xcl1
+#  4  — Cholangiocyte / epithelial:
+#       Epcam, Krt8, Krt18, Krt19, Sox9 / Dmbt1 (not hepatocyte)
+#  5  — Endothelial:
+#       Robo4, Lyve1, Mmrn2, Ptprb, Kdr, Cdh5, Stab2, Pecam1
+#  6  — Hepatocyte contamination:
+#       Alb, Apoa1, Ttr, Cyp genes, Hnf4a
+#  7  — Low-quality / mixed:
+#       mt-Rnr2, mt-Rnr1, Gm42418, Malat1, Cst3; NOT a clean biological type
+#  8  — Monocyte-derived macrophage / DC-like:
+#       Clec4b1, Ms4a6c, Cd209a, Clec4a genes, Cx3cr1, Lyz2, Fcgr1
+#  9  — Mesothelial:
+#       Msln, Muc16, Upk3b, Rspo1
+# 10  — Cytotoxic T / NK-like:
+#       Gzmk, Ifit1, Ifit3, Mx1, Cd8a, Cd8b1, Ccl5 (IFN-responsive)
+# 11  — pDC-like:
+#       Siglech, Ccr9, Flt3, Cd300c
+# 12  — Cycling cell:
+#       Mki67, Top2a, Stmn1, Hist1h3c, Pclaf, Ccna2
+# 13  — B cell:
+#       Pax5, Ms4a1, Cd79a, Cd79b, Fcer2a, Bank1 (similar to cluster 1)
+# 14  — Kupffer cell:
+#       Cd5l, Clec4f, Folr2, Fcna, Cd163, Vsig4, C6
+# 15  — cDC1:
+#       Xcr1, Clec9a, Flt3, Itgax (NOT monocyte)
+# 16  — Plasma cell:
+#       Jchain, Tnfrsf17, Igha, Ighg genes, Mzb1/Xbp1
+# 17  — Activated neutrophil:
+#       Il1r2, Trem1, Csf3r, Cxcr2, Il1b
+# 18  — Neutrophil:
+#       Ltf, Camp, Ngp, Cd177, Ly6g
+# 19  — VSMC / pericyte:
+#       Lmod1, Cnn1, Myh11, Tagln
+# 20  — B cell / possible doublet:
+#       Ms4a1, Pax5, Fcer2a, Ighd, Bank1, Cd79a + Alb/Apoa1/Ttr background
+# 21  — Fibroblast / stellate:
+#       Dpep1, Dpt, Gdf10, Mmp2, Tcf21, Pdgfra, Lum
+# 22  — Mast / basophil-like:
+#       Cpa3, Gata2, Kit, Prtn3 (NOT monocyte)
+# 23  — Cholangiocyte / epithelial:
+#       Epcam, Krt8, Krt18, Krt19, Sox9 (similar to cluster 4)
+# 24  — Hepatocyte contamination:
+#       Alb, Apoa1, Ttr, Cyp genes, Hnf4a (similar to cluster 6)
+# 25  — Endothelial:
+#       Thbd, Nos3, Lyve1, Stab2, Cdh5, Kdr, Pecam1 (NOT neutrophil)
+# 26  — pDC-like:
+#       Siglech, Ccr9, Flt3, Cd300c (similar to cluster 11)
+#
+# Clusters needing further review:
+#   7  — Low-quality / mixed; check mt% and nFeature
+#  10  — Cytotoxic T / NK-like; check Cd8 vs Ncr1 co-expression
+#  20  — B cell / possible doublet; consider SoupX / CellBender ambient RNA removal
+#  22  — Mast / basophil-like; confirm with Cpa3/Kit co-expression
+
+manual_cluster_annotation <- c(
+  "0"  = "T cell",
+  "1"  = "B cell",
+  "2"  = "Inflammatory neutrophil",
+  "3"  = "NK cell",
+  "4"  = "Cholangiocyte / epithelial",
+  "5"  = "Endothelial",
+  "6"  = "Hepatocyte contamination",
+  "7"  = "Low-quality / mixed",
+  "8"  = "Monocyte-derived macrophage / DC-like",
+  "9"  = "Mesothelial",
+  "10" = "Cytotoxic T / NK-like",
+  "11" = "pDC-like",
+  "12" = "Cycling cell",
+  "13" = "B cell",
+  "14" = "Kupffer cell",
+  "15" = "cDC1",
+  "16" = "Plasma cell",
+  "17" = "Activated neutrophil",
+  "18" = "Neutrophil",
+  "19" = "VSMC / pericyte",
+  "20" = "B cell / possible doublet",
+  "21" = "Fibroblast / stellate",
+  "22" = "Mast / basophil-like",
+  "23" = "Cholangiocyte / epithelial",
+  "24" = "Hepatocyte contamination",
+  "25" = "Endothelial",
+  "26" = "pDC-like"
 )
-# If you want to start from scratch, uncomment and edit:
-# manual_cluster_annotation <- c(
-#   "0"  = "Macrophage / Kupffer",
-#   "1"  = "Endothelial",
-#   "2"  = "T cell",
-#   ...
-# )
 
 # Apply annotation to Seurat object
-merged$celltype_manual <- manual_cluster_annotation[as.character(merged$seurat_clusters)]
+# unname() required for Seurat v5 which validates cell-name overlap on named vectors
+merged$celltype_manual <- unname(manual_cluster_annotation[as.character(merged$seurat_clusters)])
 message("Applied manual annotation. Cell types: ",
         paste(unique(merged$celltype_manual), collapse = ", "))
 
@@ -405,7 +542,7 @@ message("Saved: umap_by_group.pdf")
 # --- UMAP by annotated cell type ---
 p_ct <- DimPlot(merged, reduction = "umap", group.by = "celltype_manual",
                 label = TRUE, repel = TRUE, pt.size = 0.2, shuffle = TRUE) +
-  ggtitle("UMAP by annotated cell type (preliminary)") +
+  ggtitle("UMAP by annotated cell type") +
   theme(aspect.ratio = 1)
 
 pdf(file.path(FIG_DIR, "umap_by_celltype.pdf"), width = 12, height = 8)
@@ -432,28 +569,40 @@ message("Saved: dotplot_canonical_markers.pdf")
 # --- FeaturePlot of key markers ---
 # Select a representative subset that are likely to be present
 key_markers_feat <- c(
-  # Macrophage
-  "Adgre1", "C1qa", "Cd68",
-  # Monocyte / inflammatory
-  "Ly6c2", "Ccr2",
-  # Neutrophil
-  "S100a8", "Mpo",
-  # Endothelial
-  "Pecam1", "Kdr",
-  # Stellate
-  "Col1a1", "Dcn",
   # T cell
-  "Cd3d", "Cd4",
-  # NK
-  "Nkg7", "Gzmb",
+  "Cd3d", "Lef1", "Tcf7", "Cd8a",
   # B cell
-  "Ms4a1", "Cd79a",
-  # Plasma
-  "Jchain", "Mzb1",
-  # Cycling
-  "Mki67", "Top2a",
+  "Ms4a1", "Pax5", "Cd79a", "Bank1",
+  # NK
+  "Ncr1", "Gzma", "Gzmb", "Xcl1",
+  # Neutrophil
+  "S100a8", "Cxcr2", "Ltf", "Camp",
+  # Endothelial
+  "Pecam1", "Kdr", "Lyve1", "Robo4",
+  # Kupffer cell
+  "Cd5l", "Clec4f", "Vsig4",
+  # Monocyte-derived Mph/DC
+  "Cx3cr1", "Fcgr1", "Clec4b1",
+  # Cholangiocyte
+  "Epcam", "Krt18", "Sox9",
   # Hepatocyte
-  "Alb", "Ttr"
+  "Alb", "Hnf4a",
+  # Fibroblast / Stellate
+  "Dpep1", "Dpt", "Pdgfra",
+  # Mesothelial
+  "Msln", "Upk3b",
+  # pDC
+  "Siglech", "Ccr9",
+  # cDC1
+  "Xcr1", "Clec9a",
+  # Plasma cell
+  "Jchain", "Tnfrsf17",
+  # Mast cell
+  "Cpa3", "Kit",
+  # VSMC / pericyte
+  "Cnn1", "Myh11",
+  # Cycling
+  "Mki67", "Top2a"
 )
 key_markers_feat <- intersect(key_markers_feat, rownames(merged))
 
@@ -592,8 +741,8 @@ myeloid_assessment <- summary_ct %>%
             by = c("celltype_manual" = "celltype"))
 
 # Flag myeloid-relevant cell types
-myeloid_types <- c("Macrophage / Kupffer", "Monocyte / Inflammatory Mph",
-                   "Neutrophil")
+myeloid_types <- c("Kupffer cell", "Monocyte-derived macrophage / DC-like",
+                   "Inflammatory neutrophil", "Neutrophil", "Activated neutrophil")
 myeloid_assessment$myeloid_relevant <- myeloid_assessment$celltype_manual %in% myeloid_types
 myeloid_assessment$direction[is.na(myeloid_assessment$direction)] <- "N/A"
 myeloid_assessment$p_value[is.na(myeloid_assessment$p_value)] <- NA_real_
@@ -635,6 +784,7 @@ message("Saved: sessionInfo_02_Global_Annotation.txt")
 
 message("=== 02_Global_Annotation.R complete ===")
 message("Next steps:")
-message("  1. Review resolution UMAPs and choose final resolution")
-message("  2. Review marker tables and fill in manual_cluster_annotation")
-message("  3. Review myeloid_assessment_for_stage3.csv to decide stage-3 direction")
+message("  1. Review manual annotation against DotPlot / FeaturePlot outputs")
+message("  2. Re-check uncertain clusters (7, 10, 20, 22)")
+message("  3. Review myeloid_assessment_for_stage3.csv for Stage-3 subclustering decisions")
+message("  4. Proceed to 03_Myeloid_Subclustering.R when annotation is stable")
