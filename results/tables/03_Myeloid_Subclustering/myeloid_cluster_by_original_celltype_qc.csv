@@ -1,0 +1,49 @@
+myeloid_clusters,celltype_manual,n_cells
+0,Inflammatory neutrophil,4944
+0,Neutrophil,5
+0,Kupffer cell,3
+0,Activated neutrophil,2
+0,Monocyte-derived macrophage / DC-like,1
+1,Kupffer cell,1402
+1,Monocyte-derived macrophage / DC-like,11
+1,Inflammatory neutrophil,7
+2,Monocyte-derived macrophage / DC-like,1275
+2,Kupffer cell,6
+2,Inflammatory neutrophil,1
+3,Monocyte-derived macrophage / DC-like,1260
+3,Neutrophil,4
+4,Inflammatory neutrophil,1005
+4,Activated neutrophil,38
+4,Neutrophil,33
+4,Kupffer cell,23
+4,Monocyte-derived macrophage / DC-like,7
+5,Activated neutrophil,555
+5,Inflammatory neutrophil,56
+5,Kupffer cell,21
+5,Neutrophil,14
+5,Monocyte-derived macrophage / DC-like,1
+6,Neutrophil,464
+6,Inflammatory neutrophil,83
+7,Monocyte-derived macrophage / DC-like,483
+7,Neutrophil,2
+8,Inflammatory neutrophil,467
+8,Activated neutrophil,1
+9,Inflammatory neutrophil,425
+9,Kupffer cell,10
+9,Neutrophil,8
+9,Monocyte-derived macrophage / DC-like,7
+10,Inflammatory neutrophil,368
+10,Monocyte-derived macrophage / DC-like,2
+10,Neutrophil,1
+11,Inflammatory neutrophil,251
+11,Monocyte-derived macrophage / DC-like,1
+11,Neutrophil,1
+12,Monocyte-derived macrophage / DC-like,145
+12,Kupffer cell,15
+12,Inflammatory neutrophil,1
+13,Neutrophil,53
+13,Kupffer cell,19
+13,Monocyte-derived macrophage / DC-like,16
+14,Monocyte-derived macrophage / DC-like,41
+15,Monocyte-derived macrophage / DC-like,16
+15,Kupffer cell,2

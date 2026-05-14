@@ -1,0 +1,31 @@
+sample_id,group,celltype_manual,n_cells
+AP-300,APAP,Activated neutrophil,48
+AP-300,APAP,Inflammatory neutrophil,171
+AP-300,APAP,Kupffer cell,204
+AP-300,APAP,Monocyte-derived macrophage / DC-like,601
+AP-300,APAP,Neutrophil,100
+AP-300-2,APAP,Activated neutrophil,305
+AP-300-2,APAP,Inflammatory neutrophil,3206
+AP-300-2,APAP,Kupffer cell,225
+AP-300-2,APAP,Monocyte-derived macrophage / DC-like,850
+AP-300-2,APAP,Neutrophil,196
+AP-300-3,APAP,Activated neutrophil,130
+AP-300-3,APAP,Inflammatory neutrophil,2288
+AP-300-3,APAP,Kupffer cell,347
+AP-300-3,APAP,Monocyte-derived macrophage / DC-like,606
+AP-300-3,APAP,Neutrophil,166
+con1,Control,Activated neutrophil,39
+con1,Control,Inflammatory neutrophil,106
+con1,Control,Kupffer cell,61
+con1,Control,Monocyte-derived macrophage / DC-like,258
+con1,Control,Neutrophil,32
+con2,Control,Activated neutrophil,49
+con2,Control,Inflammatory neutrophil,906
+con2,Control,Kupffer cell,301
+con2,Control,Monocyte-derived macrophage / DC-like,623
+con2,Control,Neutrophil,63
+con3,Control,Activated neutrophil,25
+con3,Control,Inflammatory neutrophil,931
+con3,Control,Kupffer cell,363
+con3,Control,Monocyte-derived macrophage / DC-like,328
+con3,Control,Neutrophil,28

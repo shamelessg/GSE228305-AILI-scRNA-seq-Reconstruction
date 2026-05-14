@@ -1,0 +1,91 @@
+sample_id,group,myeloid_subtype,n_cells
+AP-300,APAP,Activated inflammatory neutrophil,3
+AP-300,APAP,Activated neutrophil,55
+AP-300,APAP,Antigen-presenting macrophage / Mo-Mac,216
+AP-300,APAP,Antigen-presenting myeloid with lymphoid-like signal,24
+AP-300,APAP,CCR7+ DC-like antigen-presenting myeloid,6
+AP-300,APAP,Cycling neutrophil,14
+AP-300,APAP,DC-like antigen-presenting myeloid,250
+AP-300,APAP,IFN-responsive inflammatory neutrophil,1
+AP-300,APAP,Inflammatory neutrophil,147
+AP-300,APAP,Mature neutrophil,100
+AP-300,APAP,Monocyte-derived macrophage,96
+AP-300,APAP,Neutrophil with erythroid/ambient signal,3
+AP-300,APAP,Possible doublet / hepatocyte ambient-contaminated neutrophil,6
+AP-300,APAP,Rare injury-associated macrophage-like cells,2
+AP-300,APAP,Resident Kupffer cell,201
+AP-300-2,APAP,Activated inflammatory neutrophil,173
+AP-300-2,APAP,Activated neutrophil,308
+AP-300-2,APAP,Antigen-presenting macrophage / Mo-Mac,321
+AP-300-2,APAP,Antigen-presenting myeloid with lymphoid-like signal,55
+AP-300-2,APAP,CCR7+ DC-like antigen-presenting myeloid,10
+AP-300-2,APAP,Cycling neutrophil,31
+AP-300-2,APAP,DC-like antigen-presenting myeloid,331
+AP-300-2,APAP,IFN-responsive inflammatory neutrophil,163
+AP-300-2,APAP,Inflammatory neutrophil,2455
+AP-300-2,APAP,Mature neutrophil,210
+AP-300-2,APAP,Monocyte-derived macrophage,129
+AP-300-2,APAP,Neutrophil with erythroid/ambient signal,194
+AP-300-2,APAP,Possible doublet / hepatocyte ambient-contaminated neutrophil,177
+AP-300-2,APAP,Rare injury-associated macrophage-like cells,3
+AP-300-2,APAP,Resident Kupffer cell,222
+AP-300-3,APAP,Activated inflammatory neutrophil,157
+AP-300-3,APAP,Activated neutrophil,160
+AP-300-3,APAP,Antigen-presenting macrophage / Mo-Mac,232
+AP-300-3,APAP,Antigen-presenting myeloid with lymphoid-like signal,27
+AP-300-3,APAP,CCR7+ DC-like antigen-presenting myeloid,12
+AP-300-3,APAP,Cycling neutrophil,18
+AP-300-3,APAP,DC-like antigen-presenting myeloid,248
+AP-300-3,APAP,IFN-responsive inflammatory neutrophil,108
+AP-300-3,APAP,Inflammatory neutrophil,2004
+AP-300-3,APAP,Mature neutrophil,125
+AP-300-3,APAP,Monocyte-derived macrophage,82
+AP-300-3,APAP,Neutrophil with erythroid/ambient signal,11
+AP-300-3,APAP,Possible doublet / hepatocyte ambient-contaminated neutrophil,33
+AP-300-3,APAP,Rare injury-associated macrophage-like cells,4
+AP-300-3,APAP,Resident Kupffer cell,316
+con1,Control,Activated inflammatory neutrophil,3
+con1,Control,Activated neutrophil,39
+con1,Control,Antigen-presenting macrophage / Mo-Mac,106
+con1,Control,Antigen-presenting myeloid with lymphoid-like signal,7
+con1,Control,CCR7+ DC-like antigen-presenting myeloid,3
+con1,Control,Cycling neutrophil,4
+con1,Control,DC-like antigen-presenting myeloid,95
+con1,Control,IFN-responsive inflammatory neutrophil,3
+con1,Control,Inflammatory neutrophil,85
+con1,Control,Mature neutrophil,36
+con1,Control,Monocyte-derived macrophage,45
+con1,Control,Neutrophil with erythroid/ambient signal,11
+con1,Control,Possible doublet / hepatocyte ambient-contaminated neutrophil,1
+con1,Control,Rare injury-associated macrophage-like cells,1
+con1,Control,Resident Kupffer cell,57
+con2,Control,Activated inflammatory neutrophil,70
+con2,Control,Activated neutrophil,58
+con2,Control,Antigen-presenting macrophage / Mo-Mac,280
+con2,Control,Antigen-presenting myeloid with lymphoid-like signal,30
+con2,Control,CCR7+ DC-like antigen-presenting myeloid,4
+con2,Control,Cycling neutrophil,15
+con2,Control,DC-like antigen-presenting myeloid,200
+con2,Control,IFN-responsive inflammatory neutrophil,56
+con2,Control,Inflammatory neutrophil,670
+con2,Control,Mature neutrophil,47
+con2,Control,Monocyte-derived macrophage,101
+con2,Control,Neutrophil with erythroid/ambient signal,29
+con2,Control,Possible doublet / hepatocyte ambient-contaminated neutrophil,102
+con2,Control,Rare injury-associated macrophage-like cells,6
+con2,Control,Resident Kupffer cell,274
+con3,Control,Activated inflammatory neutrophil,62
+con3,Control,Activated neutrophil,27
+con3,Control,Antigen-presenting macrophage / Mo-Mac,127
+con3,Control,Antigen-presenting myeloid with lymphoid-like signal,18
+con3,Control,CCR7+ DC-like antigen-presenting myeloid,6
+con3,Control,Cycling neutrophil,6
+con3,Control,DC-like antigen-presenting myeloid,140
+con3,Control,IFN-responsive inflammatory neutrophil,40
+con3,Control,Inflammatory neutrophil,700
+con3,Control,Mature neutrophil,29
+con3,Control,Monocyte-derived macrophage,32
+con3,Control,Neutrophil with erythroid/ambient signal,5
+con3,Control,Possible doublet / hepatocyte ambient-contaminated neutrophil,131
+con3,Control,Rare injury-associated macrophage-like cells,2
+con3,Control,Resident Kupffer cell,350

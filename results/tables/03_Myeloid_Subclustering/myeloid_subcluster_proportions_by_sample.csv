@@ -1,0 +1,91 @@
+sample_id,group,myeloid_subtype,n_cells,proportion
+AP-300,APAP,Activated inflammatory neutrophil,3,0.0026690391459074734
+AP-300,APAP,Activated neutrophil,55,0.04893238434163701
+AP-300,APAP,Antigen-presenting macrophage / Mo-Mac,216,0.19217081850533807
+AP-300,APAP,Antigen-presenting myeloid with lymphoid-like signal,24,0.021352313167259787
+AP-300,APAP,CCR7+ DC-like antigen-presenting myeloid,6,0.005338078291814947
+AP-300,APAP,Cycling neutrophil,14,0.012455516014234875
+AP-300,APAP,DC-like antigen-presenting myeloid,250,0.22241992882562278
+AP-300,APAP,IFN-responsive inflammatory neutrophil,1,8.896797153024911e-4
+AP-300,APAP,Inflammatory neutrophil,147,0.1307829181494662
+AP-300,APAP,Mature neutrophil,100,0.08896797153024912
+AP-300,APAP,Monocyte-derived macrophage,96,0.08540925266903915
+AP-300,APAP,Neutrophil with erythroid/ambient signal,3,0.0026690391459074734
+AP-300,APAP,Possible doublet / hepatocyte ambient-contaminated neutrophil,6,0.005338078291814947
+AP-300,APAP,Rare injury-associated macrophage-like cells,2,0.0017793594306049821
+AP-300,APAP,Resident Kupffer cell,201,0.17882562277580072
+AP-300-2,APAP,Activated inflammatory neutrophil,173,0.03617733166039314
+AP-300-2,APAP,Activated neutrophil,308,0.0644081974069427
+AP-300-2,APAP,Antigen-presenting macrophage / Mo-Mac,321,0.0671267252195734
+AP-300-2,APAP,Antigen-presenting myeloid with lymphoid-like signal,55,0.01150146382266834
+AP-300-2,APAP,CCR7+ DC-like antigen-presenting myeloid,10,0.002091175240485153
+AP-300-2,APAP,Cycling neutrophil,31,0.006482643245503974
+AP-300-2,APAP,DC-like antigen-presenting myeloid,331,0.06921790046005856
+AP-300-2,APAP,IFN-responsive inflammatory neutrophil,163,0.03408615641990799
+AP-300-2,APAP,Inflammatory neutrophil,2455,0.5133835215391049
+AP-300-2,APAP,Mature neutrophil,210,0.043914680050188205
+AP-300-2,APAP,Monocyte-derived macrophage,129,0.026976160602258468
+AP-300-2,APAP,Neutrophil with erythroid/ambient signal,194,0.040568799665411964
+AP-300-2,APAP,Possible doublet / hepatocyte ambient-contaminated neutrophil,177,0.0370138017565872
+AP-300-2,APAP,Rare injury-associated macrophage-like cells,3,6.273525721455458e-4
+AP-300-2,APAP,Resident Kupffer cell,222,0.04642409033877039
+AP-300-3,APAP,Activated inflammatory neutrophil,157,0.04438789934973141
+AP-300-3,APAP,Activated neutrophil,160,0.04523607577042692
+AP-300-3,APAP,Antigen-presenting macrophage / Mo-Mac,232,0.06559230986711903
+AP-300-3,APAP,Antigen-presenting myeloid with lymphoid-like signal,27,0.007633587786259542
+AP-300-3,APAP,CCR7+ DC-like antigen-presenting myeloid,12,0.0033927056827820186
+AP-300-3,APAP,Cycling neutrophil,18,0.005089058524173028
+AP-300-3,APAP,DC-like antigen-presenting myeloid,248,0.07011591744416172
+AP-300-3,APAP,IFN-responsive inflammatory neutrophil,108,0.030534351145038167
+AP-300-3,APAP,Inflammatory neutrophil,2004,0.5665818490245971
+AP-300-3,APAP,Mature neutrophil,125,0.035340684195646024
+AP-300-3,APAP,Monocyte-derived macrophage,82,0.023183488832343793
+AP-300-3,APAP,Neutrophil with erythroid/ambient signal,11,0.0031099802092168505
+AP-300-3,APAP,Possible doublet / hepatocyte ambient-contaminated neutrophil,33,0.009329940627650551
+AP-300-3,APAP,Rare injury-associated macrophage-like cells,4,0.0011309018942606728
+AP-300-3,APAP,Resident Kupffer cell,316,0.08934124964659315
+con1,Control,Activated inflammatory neutrophil,3,0.006048387096774193
+con1,Control,Activated neutrophil,39,0.07862903225806452
+con1,Control,Antigen-presenting macrophage / Mo-Mac,106,0.21370967741935484
+con1,Control,Antigen-presenting myeloid with lymphoid-like signal,7,0.014112903225806451
+con1,Control,CCR7+ DC-like antigen-presenting myeloid,3,0.006048387096774193
+con1,Control,Cycling neutrophil,4,0.008064516129032258
+con1,Control,DC-like antigen-presenting myeloid,95,0.19153225806451613
+con1,Control,IFN-responsive inflammatory neutrophil,3,0.006048387096774193
+con1,Control,Inflammatory neutrophil,85,0.17137096774193547
+con1,Control,Mature neutrophil,36,0.07258064516129033
+con1,Control,Monocyte-derived macrophage,45,0.0907258064516129
+con1,Control,Neutrophil with erythroid/ambient signal,11,0.02217741935483871
+con1,Control,Possible doublet / hepatocyte ambient-contaminated neutrophil,1,0.0020161290322580645
+con1,Control,Rare injury-associated macrophage-like cells,1,0.0020161290322580645
+con1,Control,Resident Kupffer cell,57,0.11491935483870967
+con2,Control,Activated inflammatory neutrophil,70,0.03604531410916581
+con2,Control,Activated neutrophil,58,0.029866117404737384
+con2,Control,Antigen-presenting macrophage / Mo-Mac,280,0.14418125643666324
+con2,Control,Antigen-presenting myeloid with lymphoid-like signal,30,0.015447991761071062
+con2,Control,CCR7+ DC-like antigen-presenting myeloid,4,0.0020597322348094747
+con2,Control,Cycling neutrophil,15,0.007723995880535531
+con2,Control,DC-like antigen-presenting myeloid,200,0.10298661174047374
+con2,Control,IFN-responsive inflammatory neutrophil,56,0.028836251287332648
+con2,Control,Inflammatory neutrophil,670,0.345005149330587
+con2,Control,Mature neutrophil,47,0.02420185375901133
+con2,Control,Monocyte-derived macrophage,101,0.052008238928939236
+con2,Control,Neutrophil with erythroid/ambient signal,29,0.014933058702368692
+con2,Control,Possible doublet / hepatocyte ambient-contaminated neutrophil,102,0.05252317198764161
+con2,Control,Rare injury-associated macrophage-like cells,6,0.003089598352214212
+con2,Control,Resident Kupffer cell,274,0.141091658084449
+con3,Control,Activated inflammatory neutrophil,62,0.037014925373134326
+con3,Control,Activated neutrophil,27,0.016119402985074627
+con3,Control,Antigen-presenting macrophage / Mo-Mac,127,0.07582089552238806
+con3,Control,Antigen-presenting myeloid with lymphoid-like signal,18,0.010746268656716417
+con3,Control,CCR7+ DC-like antigen-presenting myeloid,6,0.003582089552238806
+con3,Control,Cycling neutrophil,6,0.003582089552238806
+con3,Control,DC-like antigen-presenting myeloid,140,0.08358208955223881
+con3,Control,IFN-responsive inflammatory neutrophil,40,0.023880597014925373
+con3,Control,Inflammatory neutrophil,700,0.417910447761194
+con3,Control,Mature neutrophil,29,0.017313432835820895
+con3,Control,Monocyte-derived macrophage,32,0.0191044776119403
+con3,Control,Neutrophil with erythroid/ambient signal,5,0.0029850746268656717
+con3,Control,Possible doublet / hepatocyte ambient-contaminated neutrophil,131,0.07820895522388059
+con3,Control,Rare injury-associated macrophage-like cells,2,0.0011940298507462687
+con3,Control,Resident Kupffer cell,350,0.208955223880597

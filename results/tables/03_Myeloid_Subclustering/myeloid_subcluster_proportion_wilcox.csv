@@ -1,0 +1,16 @@
+myeloid_subtype,W_stat,p_value,mean_ctrl,mean_apap,direction
+Activated inflammatory neutrophil,5,1,0.0264,0.0277,Up in APAP
+Activated neutrophil,6,0.6625,0.0415,0.0529,Up in APAP
+Antigen-presenting macrophage / Mo-Mac,2,0.3827,0.1446,0.1083,Down in APAP
+Antigen-presenting myeloid with lymphoid-like signal,4,1,0.0134,0.0135,Up in APAP
+CCR7+ DC-like antigen-presenting myeloid,4,1,0.0039,0.0036,Down in APAP
+Cycling neutrophil,5,1,0.0065,0.008,Up in APAP
+DC-like antigen-presenting myeloid,3,0.6625,0.126,0.1206,Down in APAP
+IFN-responsive inflammatory neutrophil,6,0.6625,0.0196,0.0218,Up in APAP
+Inflammatory neutrophil,6,0.6625,0.3114,0.4036,Up in APAP
+Mature neutrophil,7,0.3827,0.038,0.0561,Up in APAP
+Monocyte-derived macrophage,4,1,0.053900000000000003,0.0452,Down in APAP
+Neutrophil with erythroid/ambient signal,4,1,0.0134,0.0154,Up in APAP
+Possible doublet / hepatocyte ambient-contaminated neutrophil,3,0.6625,0.0442,0.0172,Down in APAP
+Rare injury-associated macrophage-like cells,1,0.1904,0.0021,0.0012,Down in APAP
+Resident Kupffer cell,2,0.3827,0.155,0.1049,Down in APAP
