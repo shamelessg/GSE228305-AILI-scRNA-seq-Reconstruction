@@ -5,27 +5,36 @@
 </p>
 
 > **Stage 4 组成变化总览图。**  
-> 展示 GSE228305 中 APAP 处理后肝脏非实质免疫细胞组成的变化。由于样本量为 3 Control vs 3 APAP，本项目更强调 effect size 和可解释趋势，而不是把探索性 p-value 写成确定结论。
+> 展示 GSE228305 中 APAP 处理后肝脏非实质免疫细胞组成的变化。
 
 ---
 
-## 从单细胞流程复现到探索性科研分析：APAP 急性肝损伤免疫微环境重构
+## 单细胞流程与探索性科研分析：APAP 急性肝损伤免疫微环境重构
 
-本仓库整理了基于 **GSE228305** 数据集的单细胞 RNA-seq 分析流程。研究对象是 APAP 诱导急性肝损伤后，肝脏非实质细胞，尤其是免疫细胞和髓系细胞的组成与功能状态变化。
+本项目为本人大三上学期进行的第二个生信实践项目，聚焦单细胞组学分析。  
+受限于样本数量与广度，本项目不同于项目一，并不是一个完整的故事复现，而是具有相当的开放性，得到一些探索性结论。
+希望以此展示我生信学习的过程与已学到的科学技能与思维。  
 
-这个项目的重点不是“跑出一个漂亮结论”，也不是强行复现某个固定故事，而是尽量保留真实分析中的判断过程：
+## Project Overall Introduction / 项目整体介绍
 
-- QC 阈值需要结合图形人工判断；
-- 聚类 resolution 需要比较不同粒度；
-- 细胞注释不能只靠自动 marker 表；
-- 髓系细胞是否值得深入，需要先看数据是否支持；
-- Cell communication 只作为补充筛查，不作为主线机制证据。
+本项目为 **GSE228305** 数据集（3APAP VS 3 Control）的单细胞 RNA-seq 分析流程。 （数据介绍见 data_description） 
+研究对象是 APAP 诱导急性肝损伤后，肝脏非实质细胞，尤其是免疫细胞和髓系细胞的组成与功能状态变化。  
+参考文献：(<Type I interferon signaling facilitates resolution of acute liver injury by priming macrophage polarization.pdf>)
 
 项目核心问题是：
 
 > APAP 处理后，肝脏非实质免疫细胞的组成、功能状态和潜在互作轴是否出现可解释变化？
 
 当前比较稳妥的结论是：APAP 处理后存在中性粒细胞相关群体扩张，同时 Kupffer cell、endothelial cell 和部分髓系抗原呈递/巨噬细胞群体出现转录状态变化。但这些结果仍属于探索性发现，不能写成已经验证的机制。
+
+这个项目的重点不是“跑出一个漂亮结论”，也不是强行复现某个固定故事，而是保留真实分析中的判断过程：
+
+- QC 阈值需要结合图形人工判断；
+- 聚类 resolution 需要比较不同粒度；
+- 细胞注释不能只靠自动 marker 表，人工判断关键数据；
+- 髓系细胞深入与否，视中间数据情况而定；
+- 中间结果存在局限性，原计划时序分析取消。
+- 原计划 Cell communication 降格为补充筛查，不做完整分析。
 
 ## Pipeline Overview / 分析全流程拆解
 
@@ -44,7 +53,7 @@ scripts/01_QC_and_Integration.R
 - 读取 6 个样本的表达矩阵；
 - 构建 Seurat object；
 - 计算 `nFeature_RNA`、`nCount_RNA`、`percent.mt` 等 QC 指标；
-- 输出过滤前后的 QC 图，保留人工判断阈值的位置；
+- 输出过滤前后的 QC 图，人工判断阈值；
 - 完成 normalization、PCA、Harmony integration 和 UMAP；
 - 比较整合前后样本和分组的混合情况。
 
@@ -70,7 +79,7 @@ scripts/02_Global_Annotation.R
 - 比较多个 resolution 的聚类结果；
 - 结合 canonical markers、cluster marker 表和表达图进行粗粒度细胞注释；
 - 输出不同细胞类型在 Control/APAP 之间的样本级比例变化；
-- 初步判断髓系细胞是否值得进入 focused subclustering。
+- 初步判断髓系细胞是否值得进入 focused subclustering。 （值得进入）
 
 关键输出：
 
@@ -95,7 +104,7 @@ scripts/03_Myeloid_Subclustering.R
 - 在髓系细胞内部重新降维、聚类和注释；
 - 区分 Resident Kupffer cell、Monocyte-derived macrophage、DC-like antigen-presenting myeloid、不同 neutrophil states 等亚群；
 - 输出髓系亚群在样本和分组之间的比例变化；
-- 判断髓系结构是否适合做拟时序。
+- 判断髓系结构是否适合做拟时序。 （不适合，替换为组间功能比较）
 
 这里的一个重要分析决策是：髓系 UMAP 更像多个 lineage/state 的分离结构，而不是一条清楚连续轨迹。因此第四阶段没有强行做 Monocle3 pseudotime，而是改为 APAP-Control functional comparison。
 
@@ -148,7 +157,7 @@ scripts/05_Cell_Communication.R
 
 Stage 5 不是完整 CellChat discovery analysis，而是一个轻量级、靶向的 ligand-receptor screening。
 
-这样设计是因为 Stage 4 的结果本身并不适合继续强行扩展成宏大的细胞通讯故事。为了避免过度解读，Stage 5 只围绕 Stage 4 提示的少数轴进行检查：
+是因为 Stage 4 的结果本身并不适合继续强行扩展成宏大的细胞通讯故事。为了避免过度解读，Stage 5 只围绕 Stage 4 提示的少数轴进行检查：
 
 - neutrophil / activated neutrophil → endothelial；
 - Kupffer / macrophage → neutrophil 或 endothelial；
@@ -177,12 +186,12 @@ results/figures/05_Cell_Communication/targeted_interaction_delta_summary.pdf
 ### 1. 中性粒细胞扩张是最稳定的观察
 
 APAP 组中 inflammatory neutrophil、activated neutrophil 和 mature neutrophil 相关群体整体呈扩张趋势。  
-其中 inflammatory neutrophil 的比例变化最明显，但 pseudobulk DE 并没有给出大量显著 DEG，因此更适合表述为“组成扩张”，而不是“群体内强烈转录重塑”。
+其中 inflammatory neutrophil 的比例变化最明显，但 pseudobulk DE 并没有给出大量显著 DEG，因此表述为“组成扩张”，而不是“群体内强烈转录重塑”。
 
 ### 2. Kupffer cell 不能简单写成“减少”或“消失”
 
 Resident Kupffer cell 在髓系亚群比例中下降，但 global Kupffer cell 层面存在较多差异表达基因。  
-更稳妥的解释是：APAP 后 Kupffer 相关状态发生转录重编程，且比例变化可能受到中性粒细胞浸润和 marker 表达改变的影响。
+稳妥的解释：APAP 后 Kupffer 相关状态发生转录重编程，且比例变化可能受到中性粒细胞浸润和 marker 表达改变的影响。
 
 ### 3. Endothelial compartment 有损伤/激活相关信号，但方向不完全清楚
 
@@ -204,44 +213,23 @@ Targeted LR screening 提示了一些候选互作，例如：
 
 这些结果只作为 Stage 4 的补充线索，不作为独立发现。
 
+
 ## Repository layout
 
 ```text
 scripts/              # 五个阶段的 R 脚本
 data/external/        # 原始数据占位目录，实际大文件不上传 GitHub
-data/processed/       # 中间 Seurat 对象和阶段输出，默认不纳入 Git
+data/processed/       # 中间 Seurat 对象和阶段输出，默认不上传 GitHub
 results/tables/       # marker、比例、pseudobulk、module score、LR screening 等结果表
 results/figures/      # QC、UMAP、比例图、功能热图和补充通讯图
 notes/                # 分析笔记、问题记录和阶段决策说明
 environment.yml       # conda 环境骨架
 ```
 
-## Data note
-
-单细胞项目的中间对象非常大，不适合直接上传 GitHub。当前主要空间来自 Seurat RDS：
-
-```text
-Stage 1 integrated Seurat object:      about 1.8G
-Stage 2 annotated Seurat object:       about 1.8G
-Stage 3 myeloid Seurat object:         about 2.2G
-Stage 4 functional-comparison object:  about 4.0G
-Stage 5 targeted summary object:       less than 1M
-```
-
-因此仓库中更适合保留：
-
-- scripts；
-- README；
-- notes；
-- 关键结果表；
-- 关键图片；
-- environment.yml。
-
-大体积 `data/processed/*.rds` 文件可以在项目归档后删除，必要时根据脚本重新生成。
 
 ## How to run
 
-建议在仓库根目录运行脚本。环境名称不强制，但需要安装 `environment.yml` 和 `package_versions_current.csv` 中记录的 R 包。
+建议在仓库根目录运行脚本。环境名称不强制，但需要安装 `environment.yml` 中记录的 R 包。
 
 ```bash
 conda activate singlecell
@@ -257,11 +245,9 @@ source("scripts/05_Cell_Communication.R")
 
 ## Environment & Dependencies
 
-本项目当前运行环境为 conda environment `singlecell`。  
-核心版本记录见：
+本项目当前运行核心版本记录见：
 
 - `environment.yml`
-- `results/tables/package_versions_current.csv`
 - 各阶段 `sessionInfo_*.txt`
 
 主要依赖如下：
@@ -275,18 +261,17 @@ source("scripts/05_Cell_Communication.R")
 | 可视化 | `ggplot2`, `patchwork`, `pheatmap`, `ggrepel`, `RColorBrewer` | UMAP、dotplot、热图、summary plot |
 | 通讯参考 | `CellChat`, `NMF`, `ComplexHeatmap`, `circlize` | ligand-receptor 数据库和补充可视化支持 |
 
-> Reproducibility note:  
-> `environment.yml` 是可创建环境的 conda 骨架；部分 R 包，尤其是 `CellChat`、`presto`、`edgeR` 和 `ComplexHeatmap`，可能需要在 R 内通过 `BiocManager` 或 `remotes` 补装。当前实际可运行版本见 `results/tables/package_versions_current.csv`。
 
 ## Interpretation limits / 结果边界
 
-本项目所有结论都应按探索性分析理解：
+本项目所有结论均探索性分析理解：
 
 - 样本量为 3 Control vs 3 APAP，统计效力有限；
-- 细胞比例变化不等于绝对细胞数量变化；
+- 细胞比例变化无法刻画绝对细胞数量变化；
 - module score 代表表达程序，不等于直接通路活性；
 - pseudobulk DE 比细胞级检验更稳妥，但仍受样本量限制；
 - Stage 5 是 targeted ligand-receptor screening，不是完整通讯网络发现。
 
-因此最终叙事建议保持克制：  
-本项目支持 APAP 后非实质免疫微环境发生重塑，尤其是中性粒细胞扩张和 Kupffer/endothelial/myeloid 状态变化；但具体调控机制仍需要更多样本、实验验证或独立数据集支持。
+因此最终叙事保持克制：  
+本项目支持 APAP 后非实质免疫微环境发生重塑，尤其是中性粒细胞扩张和 Kupffer/endothelial/myeloid 状态变化；  
+但具体调控机制仍需要更多样本、实验验证或独立数据集支持。
