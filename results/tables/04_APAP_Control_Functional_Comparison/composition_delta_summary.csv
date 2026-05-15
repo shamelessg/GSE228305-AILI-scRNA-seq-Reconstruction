@@ -1,0 +1,38 @@
+level,cell_group,mean_control,mean_apap,delta_apap_minus_control,fold_change_apap_vs_control,direction,p_value_exploratory,interpretation_note
+global_celltype,Hepatocyte contamination,0.08185447061118571,0.024288692030337393,-0.05756577858084832,0.2967301828352214,Down in APAP,0.3827,
+global_celltype,Inflammatory neutrophil,0.04151767660312897,0.09786328575732477,0.0563456091541958,2.3571474553551806,Up in APAP,0.3827,Markedly expanded in APAP; suggests neutrophil recruitment/activation in injured liver.
+global_celltype,T cell,0.24336237605753194,0.19117211697546613,-0.052190259082065815,0.7855450792043228,Down in APAP,0.6625,Relatively stable proportion; adaptive immune changes may be subtle at this time point.
+global_celltype,Endothelial,0.0713685613630257,0.0376603748686208,-0.03370818649440491,0.5276885809293014,Down in APAP,0.6625,Possible decrease; may reflect endothelial activation or loss in injured liver.
+global_celltype,Monocyte-derived macrophage / DC-like,0.03510019600323058,0.06166518864660149,0.026564992643370908,1.7568331709864495,Up in APAP,0.6625,Proportion relatively stable; may reflect balanced monocyte recruitment and differentiation.
+global_celltype,pDC-like,0.025601307136104003,0.03951503231350236,0.013913725177398358,1.5434771397971574,Up in APAP,0.6625,
+global_celltype,Low-quality / mixed,0.05425701723122191,0.041050234790764355,-0.013206782440457553,0.7565884909563775,Down in APAP,0.6625,
+global_celltype,Cycling cell,0.02194000719846126,0.03505696511158563,0.013116957913124373,1.5978556795571297,Up in APAP,0.3827,
+global_celltype,Cholangiocyte / epithelial,0.062342964208177226,0.07509787991396363,0.012754915705786407,1.2045927053323109,Up in APAP,1,
+global_celltype,cDC1,0.013446042052820094,0.02442184651100736,0.010975804458187265,1.816285150311966,Up in APAP,0.3827,
+global_celltype,Neutrophil,0.0038557656266927,0.0121870033241087,0.008331237697416,3.1607220210016127,Up in APAP,0.0809,
+global_celltype,NK cell,0.052500638817492035,0.05938674676136907,0.0068861079438770345,1.131162364858363,Up in APAP,0.6625,Modest decrease; NK dynamics in APAP injury are context-dependent.
+global_celltype,Activated neutrophil,0.004045323359648697,0.009852865327464957,0.00580754196781626,2.4356187259948974,Up in APAP,0.1904,Increased in APAP; consistent with neutrophil activation in tissue damage.
+global_celltype,Kupffer cell,0.016673145861786677,0.022398564019371948,0.005725418157585271,1.3433915953861715,Up in APAP,1,Decreased proportion in APAP; likely reflects dilution by infiltrating cells and/or Kupffer loss.
+global_celltype,Plasma cell,0.01721829833892534,0.012816409078139383,-0.004401889260785956,0.744348182721714,Down in APAP,0.3827,
+global_celltype,VSMC / pericyte,0.009268187913668957,0.0061595222079742365,-0.0031086657056947206,0.6645875402342694,Down in APAP,1,
+global_celltype,B cell / possible doublet,0.0054452901990567635,0.0027927521191886,-0.0026525380798681636,0.5128747995235152,Down in APAP,0.6625,
+global_celltype,Fibroblast / stellate,0.003269046044499507,0.005701233767999377,0.00243218772349987,1.7440053429630538,Up in APAP,1,Possible increase; may indicate early stellate activation or ECM remodelling.
+global_celltype,Mast / basophil-like,0.00343626035127007,0.005723596342630783,0.0022873359913607133,1.665646882814131,Up in APAP,0.3827,
+global_celltype,B cell,0.17102021353446148,0.16875623256294248,-0.002263980971519003,0.9867619100413367,Down in APAP,1,Unchanged; B cells not expected primary responders in acute APAP.
+global_celltype,Mesothelial,0.030071767731950815,0.03207150428184477,0.0019997365498939552,1.0664988027215063,Up in APAP,1,
+global_celltype,Cytotoxic T / NK-like,0.03240544375565951,0.034361953287791736,0.0019565095321322223,1.0603759524752852,Up in APAP,0.6625,
+myeloid_subtype,Inflammatory neutrophil,0.3114288549445722,0.4035827629043894,0.0921539079598172,1.2959067745222859,Up in APAP,0.6625,Expanded in APAP; major neutrophil-driven inflammatory response.
+myeloid_subtype,Resident Kupffer cell,0.1549887456012519,0.10486365425372142,-0.05012509134753047,0.6765888313175328,Down in APAP,0.3827,Resident Kupffer proportion decreased in APAP; dilution by infiltrating myeloid or activation-induced marker loss.
+myeloid_subtype,Antigen-presenting macrophage / Mo-Mac,0.14457060979280206,0.10829661786401017,-0.036273991928791896,0.7490915201867128,Down in APAP,0.3827,Decreased proportion; may be outcompeted by inflammatory neutrophil expansion rather than functional loss.
+myeloid_subtype,Possible doublet / hepatocyte ambient-contaminated neutrophil,0.044249418747926754,0.017227273558684232,-0.027022145189242522,0.3893220305745009,Down in APAP,0.6625,
+myeloid_subtype,Mature neutrophil,0.03803197725204085,0.05607444525869444,0.018042468006653593,1.474402576733909,Up in APAP,0.3827,Modestly increased; mature neutrophil pool expanded.
+myeloid_subtype,Activated neutrophil,0.04153818421595884,0.05285888583966888,0.011320701623710037,1.272537228995211,Up in APAP,0.6625,Modestly increased; neutrophil activation states elevated in APAP.
+myeloid_subtype,Monocyte-derived macrophage,0.053946174330830814,0.045189634034547135,-0.008756540296283678,0.8376800504409592,Down in APAP,1,Stable or slightly decreased; Mo-Mac may differentiate into other states post-injury.
+myeloid_subtype,DC-like antigen-presenting myeloid,0.12603365311907622,0.12058458224328103,-0.005449070875795187,0.9567649533204682,Down in APAP,0.6625,Decreased; antigen-presenting myeloid compartments relatively contracted in acute injury.
+myeloid_subtype,IFN-responsive inflammatory neutrophil,0.0195884117996774,0.021836729093416215,0.002248317293738814,1.1147779267013287,Up in APAP,0.6625,Expanded in APAP; IFN-responsive neutrophil subset potentially involved in inflammatory signalling.
+myeloid_subtype,Neutrophil with erythroid/ambient signal,0.013365184228024357,0.015449273006845426,0.0020840887788210697,1.1559341602228808,Up in APAP,1,
+myeloid_subtype,Cycling neutrophil,0.00645686718726886,0.008009072594637286,0.0015522054073684264,1.240396056221962,Up in APAP,1,
+myeloid_subtype,Activated inflammatory neutrophil,0.026369542193024773,0.027744756718677342,0.0013752145256525697,1.052151626887794,Up in APAP,1,
+myeloid_subtype,Rare injury-associated macrophage-like cells,0.0020999190784061765,0.0011792046323370652,-9.207144460691113e-4,0.5615476541277358,Down in APAP,0.1904,
+myeloid_subtype,CCR7+ DC-like antigen-presenting myeloid,0.0038967362946074864,0.0036073197383606997,-2.894165562467867e-4,0.9257284726586973,Down in APAP,1,Decreased; CCR7+ DC-like cells may migrate out or be diluted.
+myeloid_subtype,Antigen-presenting myeloid with lymphoid-like signal,0.013435721214531307,0.01349578825872922,6.0067044197913144e-5,1.004470697422104,Up in APAP,1,

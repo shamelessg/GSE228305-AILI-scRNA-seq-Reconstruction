@@ -1,0 +1,52 @@
+analysis_level,cell_group,evidence_source,direction,evidence_detail,confidence
+myeloid_subtype,Inflammatory neutrophil,composition,Expanded,"delta_proportion = +0.0563; mean_APAP = 0.0979, mean_Control = 0.0415",Low
+myeloid_subtype,Inflammatory neutrophil,module_score,Functional description only,"Up: Chemokine_recruitment, Antigen_presentation, T_NK_activation; Down: IFN_response, ROS_degranulation, Tissue_repair_ECM",Low
+myeloid_subtype,Inflammatory neutrophil,pseudobulk_DE,No significant DEGs,0/8080 genes with FDR < 0.05,Low
+myeloid_subtype,Resident Kupffer cell,composition,Contracted,"delta_proportion = -0.0501; mean_APAP = 0.1049, mean_Control = 0.1550",Uncertain
+myeloid_subtype,Resident Kupffer cell,module_score,Functional description only,"Up: Neutrophil_inflammation, Antigen_presentation, Endothelial_activation; Down: Phagocytosis_efferocytosis, ROS_degranulation, IFN_response",Uncertain
+myeloid_subtype,Resident Kupffer cell,pseudobulk_DE,Upregulated,"n_up=221, n_down=209, n_total_tested=8818. Up (FDR<0.05): Vdr, Cdkn1a, Trem1, Tgfb3, Mkl1; Down (FDR<0.05): Gpnmb, Gm35154, Mmp13, Prr5l, Cyp26b1",Uncertain
+global_celltype,Monocyte-derived macrophage / DC-like,composition,Expanded,"delta_proportion = +0.0266; mean_APAP = 0.0617, mean_Control = 0.0351",Uncertain
+global_celltype,Monocyte-derived macrophage / DC-like,module_score,Functional description only,"Up: Neutrophil_inflammation, T_NK_activation, IL1_TNF_inflammatory; Down: Anti_inflammatory_repair, Kupffer_resident_identity, ROS_degranulation",Uncertain
+global_celltype,Monocyte-derived macrophage / DC-like,pseudobulk_DE,Downregulated,"n_up=74, n_down=87, n_total_tested=10794. Up (FDR<0.05): Tgfb3, Slc5a3, Zbtb16, Map3k6, Fkbp5; Down (FDR<0.05): Iglc1, Slc16a13, Hamp, Ephx2, Gm38843",Uncertain
+myeloid_subtype,Monocyte-derived macrophage,composition,Contracted,"delta_proportion = -0.0088; mean_APAP = 0.0452, mean_Control = 0.0539",Uncertain
+myeloid_subtype,Monocyte-derived macrophage,module_score,Functional description only,"Up: Antigen_presentation, Neutrophil_inflammation, IL1_TNF_inflammatory; Down: ROS_degranulation, Anti_inflammatory_repair, Chemokine_recruitment",Uncertain
+myeloid_subtype,Monocyte-derived macrophage,pseudobulk_DE,Upregulated,"n_up=12, n_down=9, n_total_tested=5338. Up (FDR<0.05): Klf9, Il1r2, Fkbp5, Pdcd4, Hist1h2bc; Down (FDR<0.05): Vcan, Chil3, Fpr2, Fam69a, Pou2f2",Uncertain
+myeloid_subtype,Antigen-presenting macrophage / Mo-Mac,composition,Contracted,"delta_proportion = -0.0363; mean_APAP = 0.1083, mean_Control = 0.1446",Uncertain
+myeloid_subtype,Antigen-presenting macrophage / Mo-Mac,module_score,Functional description only,"Up: Neutrophil_inflammation, T_NK_activation, Antigen_presentation; Down: Anti_inflammatory_repair, Kupffer_resident_identity, Chemokine_recruitment",Uncertain
+myeloid_subtype,Antigen-presenting macrophage / Mo-Mac,pseudobulk_DE,Upregulated,"n_up=70, n_down=40, n_total_tested=8453. Up (FDR<0.05): Tgfb3, Zbtb16, Map3k6, Il1r2, Hdc; Down (FDR<0.05): Iglc1, P2ry13, Hamp, Gm38843, Cx3cr1",Uncertain
+myeloid_subtype,DC-like antigen-presenting myeloid,composition,Contracted,"delta_proportion = -0.0054; mean_APAP = 0.1206, mean_Control = 0.1260",High
+myeloid_subtype,DC-like antigen-presenting myeloid,module_score,Functional description only,"Up: Neutrophil_inflammation, Kupffer_resident_identity, Tissue_repair_ECM; Down: Antigen_presentation, ROS_degranulation, Phagocytosis_efferocytosis",High
+myeloid_subtype,DC-like antigen-presenting myeloid,pseudobulk_DE,Downregulated,"n_up=42, n_down=60, n_total_tested=8609. Up (FDR<0.05): Pex11a, Csf1, Slc5a3, Klf9, Hdc; Down (FDR<0.05): Mmp12, Hamp, Serpina1e, Gm38843, Gm9733",High
+global_celltype,Endothelial,composition,Contracted,"delta_proportion = -0.0337; mean_APAP = 0.0377, mean_Control = 0.0714",Uncertain
+global_celltype,Endothelial,module_score,Functional description only,"Up: Neutrophil_inflammation, IL1_TNF_inflammatory, Antigen_presentation; Down: Phagocytosis_efferocytosis, IFN_response, Anti_inflammatory_repair",Uncertain
+global_celltype,Endothelial,pseudobulk_DE,Upregulated,"n_up=149, n_down=148, n_total_tested=10900. Up (FDR<0.05): Hmox1, Cdkn1a, Gm6061, Il1r2, Klrb1b; Down (FDR<0.05): Mup20, Hamp, Aass, Ptch2, Fam26f",Uncertain
+global_celltype,T cell,composition,Contracted,"delta_proportion = -0.0522; mean_APAP = 0.1912, mean_Control = 0.2434",Uncertain
+global_celltype,T cell,module_score,Functional description only,"Up: Neutrophil_inflammation, Antigen_presentation, IL1_TNF_inflammatory; Down: T_NK_activation, ROS_degranulation",Uncertain
+global_celltype,T cell,pseudobulk_DE,Upregulated,"n_up=98, n_down=96, n_total_tested=12644. Up (FDR<0.05): Wfikkn1, Cables1, Il1r2, Ston1, Fkbp5; Down (FDR<0.05): Cnga1, Ampd1, Gm6545, Ly6g5b, Gm47242",Uncertain
+global_celltype,NK cell,composition,Expanded,"delta_proportion = +0.0069; mean_APAP = 0.0594, mean_Control = 0.0525",High
+global_celltype,NK cell,module_score,Functional description only,"Up: Neutrophil_inflammation, Antigen_presentation, IL1_TNF_inflammatory; Down: T_NK_activation, ROS_degranulation, Chemokine_recruitment",High
+global_celltype,NK cell,pseudobulk_DE,Upregulated,"n_up=98, n_down=90, n_total_tested=10040. Up (FDR<0.05): Acod1, Il1r2, Klf9, Cd14, Cables1; Down (FDR<0.05): Serpina1e, Hamp, Apoa5, Asb2, 2010016I18Rik",High
+global_celltype,B cell,composition,Contracted,"delta_proportion = -0.0023; mean_APAP = 0.1688, mean_Control = 0.1710",Uncertain
+global_celltype,B cell,module_score,Functional description only,"Up: Neutrophil_inflammation, T_NK_activation, Chemokine_recruitment; Down: ROS_degranulation, Endothelial_activation",Uncertain
+global_celltype,B cell,pseudobulk_DE,Upregulated,"n_up=29, n_down=20, n_total_tested=12033. Up (FDR<0.05): Fkbp5, Pex11a, Ptpn22, Il1r2, Cd14; Down (FDR<0.05): Iglj3, Gm47730, Il5ra, Ms4a4c, Iglv1",Uncertain
+global_celltype,Fibroblast / stellate,composition,Expanded,"delta_proportion = +0.0024; mean_APAP = 0.0057, mean_Control = 0.0033",Moderate
+global_celltype,Fibroblast / stellate,module_score,Functional description only,"Up: Neutrophil_inflammation, IL1_TNF_inflammatory, Chemokine_recruitment; Down: Kupffer_resident_identity, Anti_inflammatory_repair, Phagocytosis_efferocytosis",Moderate
+global_celltype,Fibroblast / stellate,pseudobulk_DE,Upregulated,"n_up=8, n_down=3, n_total_tested=4414. Up (FDR<0.05): Rnd1, Mt2, Mt1, Fbxo33, Bcl3; Down (FDR<0.05): Fcna, Cdc42ep3, Lbh",Moderate
+myeloid_subtype,Activated neutrophil,composition,Expanded,"delta_proportion = +0.0058; mean_APAP = 0.0099, mean_Control = 0.0040",Moderate
+myeloid_subtype,Activated neutrophil,module_score,Functional description only,"Up: Chemokine_recruitment, Neutrophil_inflammation, T_NK_activation; Down: ROS_degranulation, Anti_inflammatory_repair, Tissue_repair_ECM",Moderate
+myeloid_subtype,Activated neutrophil,pseudobulk_DE,Upregulated,"n_up=8, n_down=4, n_total_tested=2714. Up (FDR<0.05): Fkbp5, Id2, Ptpn22, Rdh12, Btla; Down (FDR<0.05): Igha, Pilra, Pou2f2, Anxa1",Moderate
+myeloid_subtype,Mature neutrophil,composition,Expanded,"delta_proportion = +0.0180; mean_APAP = 0.0561, mean_Control = 0.0380",Low
+myeloid_subtype,Mature neutrophil,module_score,Functional description only,"Up: Antigen_presentation, Chemokine_recruitment, IL1_TNF_inflammatory; Down: ROS_degranulation, Neutrophil_inflammation, Anti_inflammatory_repair",Low
+myeloid_subtype,Mature neutrophil,pseudobulk_DE,Upregulated,"n_up=1, n_down=0, n_total_tested=2876. Up (FDR<0.05): Klf13",Low
+myeloid_subtype,IFN-responsive inflammatory neutrophil,composition,Expanded,"delta_proportion = +0.0022; mean_APAP = 0.0218, mean_Control = 0.0196",Low
+myeloid_subtype,IFN-responsive inflammatory neutrophil,module_score,Functional description only,"Up: Neutrophil_inflammation, Antigen_presentation, Anti_inflammatory_repair; Down: IL1_TNF_inflammatory, Chemokine_recruitment, T_NK_activation",Low
+myeloid_subtype,IFN-responsive inflammatory neutrophil,pseudobulk_DE,No significant DEGs,0/2132 genes with FDR < 0.05,Low
+myeloid_subtype,Activated inflammatory neutrophil,composition,Expanded,"delta_proportion = +0.0014; mean_APAP = 0.0277, mean_Control = 0.0264",Low
+myeloid_subtype,Activated inflammatory neutrophil,module_score,Functional description only,"Up: T_NK_activation, Antigen_presentation, Phagocytosis_efferocytosis; Down: ROS_degranulation, IL1_TNF_inflammatory, Anti_inflammatory_repair",Low
+myeloid_subtype,Activated inflammatory neutrophil,pseudobulk_DE,No significant DEGs,0/2808 genes with FDR < 0.05,Low
+global_celltype,Kupffer cell,composition,Expanded,"delta_proportion = +0.0057; mean_APAP = 0.0224, mean_Control = 0.0167",High
+global_celltype,Kupffer cell,module_score,Functional description only,"Up: Neutrophil_inflammation, Antigen_presentation, Kupffer_resident_identity; Down: T_NK_activation, Phagocytosis_efferocytosis, ROS_degranulation",High
+global_celltype,Kupffer cell,pseudobulk_DE,Upregulated,"n_up=223, n_down=197, n_total_tested=8977. Up (FDR<0.05): Vdr, Cdkn1a, Trem1, Nfil3, Mkl1; Down (FDR<0.05): Gpnmb, Gm35154, Mmp13, Prr5l, Cyp26b1",High
+global_celltype,Neutrophil,composition,Expanded,"delta_proportion = +0.0083; mean_APAP = 0.0122, mean_Control = 0.0039",Low
+global_celltype,Neutrophil,module_score,Functional description only,"Up: Antigen_presentation, Chemokine_recruitment, T_NK_activation; Down: Neutrophil_inflammation, Anti_inflammatory_repair, ROS_degranulation",Low
+global_celltype,Neutrophil,pseudobulk_DE,No significant DEGs,0/3634 genes with FDR < 0.05,Low

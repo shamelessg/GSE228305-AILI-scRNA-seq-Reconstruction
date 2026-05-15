@@ -1,0 +1,13 @@
+gene_set,n_defined,n_in_global,n_in_myeloid,usable,note
+Neutrophil_inflammation,15,15,15,TRUE,
+Chemokine_recruitment,15,15,15,TRUE,
+IL1_TNF_inflammatory,15,15,15,TRUE,
+IFN_response,14,14,14,TRUE,
+Antigen_presentation,13,13,13,TRUE,
+Kupffer_resident_identity,13,13,13,TRUE,
+Phagocytosis_efferocytosis,14,14,14,TRUE,
+Tissue_repair_ECM,19,19,19,TRUE,
+Endothelial_activation,14,14,14,TRUE,
+ROS_degranulation,15,15,15,TRUE,
+T_NK_activation,14,13,13,TRUE,
+Anti_inflammatory_repair,15,15,15,TRUE,
