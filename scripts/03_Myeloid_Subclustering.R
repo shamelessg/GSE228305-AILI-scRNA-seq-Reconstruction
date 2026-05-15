@@ -25,15 +25,6 @@
 # 0. Setup
 # -------------------------------------------------------------------------
 
-# --- Check conda environment ---
-current_env <- Sys.getenv("CONDA_DEFAULT_ENV")
-if (current_env != "singlecell") {
-  stop("Current conda environment is '", current_env,
-       "'. Please activate 'singlecell' environment:\n",
-       "  conda activate singlecell")
-}
-message("conda environment: ", current_env)
-
 library(Seurat)
 library(harmony)
 library(ggplot2)
@@ -47,19 +38,9 @@ library(future)
 plan("sequential")
 options(future.globals.maxSize = 8000 * 1024^2)
 
-# --- project root from script path ---
-script_args <- commandArgs(trailingOnly = FALSE)
-file_arg    <- grep("^--file=", script_args, value = TRUE)
-script_path <- sub("^--file=", "", file_arg)
-if (length(script_path) == 0) {
-  PROJ_ROOT <- getwd()
-} else {
-  PROJ_ROOT <- normalizePath(file.path(dirname(script_path), ".."))
-}
+PROJ_ROOT <- getwd()
 setwd(PROJ_ROOT)
-message("Project root: ", PROJ_ROOT)
 
-# --- directories ---
 PROC_DIR   <- file.path(PROJ_ROOT, "data", "processed", "03_Myeloid_Subclustering")
 FIG_DIR    <- file.path(PROJ_ROOT, "results", "figures",   "03_Myeloid_Subclustering")
 TAB_DIR    <- file.path(PROJ_ROOT, "results", "tables",    "03_Myeloid_Subclustering")
@@ -78,20 +59,7 @@ NPCS <- 25
 # A. Extract myeloid subset from Stage-2 object
 # -------------------------------------------------------------------------
 
-if (!file.exists(STAGE2_RDS)) {
-  stop("Stage-2 RDS not found: ", STAGE2_RDS)
-}
-message("Reading: ", STAGE2_RDS)
 merged <- readRDS(STAGE2_RDS)
-message("Loaded object: ", ncol(merged), " cells x ", nrow(merged), " genes")
-
-# --- validate metadata ---
-req_meta <- c("celltype_manual", "sample_id", "group")
-missing_meta <- setdiff(req_meta, colnames(merged@meta.data))
-if (length(missing_meta) > 0) {
-  stop("Missing required metadata columns: ",
-       paste(missing_meta, collapse = ", "))
-}
 
 # --- myeloid cell types to keep ---
 myeloid_keep <- c(
@@ -1109,8 +1077,14 @@ note_lines <- c(
   "- `myeloid_cluster_counts_by_sample.csv`",
   "- `myeloid_cluster_proportions_by_sample.csv`",
   "",
-  "主要趋势（待人工根据实际输出填写）：",
-  "- 待填写...",
+  "主要趋势：",
+  "- **Inflammatory neutrophil** 是最清楚的 APAP 上升趋势：Control 均值 0.3114，APAP 均值 0.4036。",
+  "- **Mature neutrophil**、**Activated neutrophil**、**IFN-responsive inflammatory neutrophil** 和 **Activated inflammatory neutrophil** 也整体偏向 APAP 上升，但幅度较小。",
+  "- **Resident Kupffer cell** 在 APAP 中相对下降：Control 均值 0.1550，APAP 均值 0.1049。",
+  "- **Antigen-presenting macrophage / Mo-Mac** 和 **DC-like antigen-presenting myeloid** 在 APAP 中相对下降或持平，提示 APAP 后髓系组成更偏向炎症性中性粒细胞，而不是单纯抗原呈递髓系扩增。",
+  "- **Possible doublet / hepatocyte ambient-contaminated neutrophil** 在 APAP 中下降，不应作为生物学主线解释。",
+  "",
+  "这些趋势与 `myeloid_subcluster_proportion_stacked.pdf` 一致：按样本展示已经足够说明组成变化来自多个样本的方向性差异，而不是只来自合并细胞后的假象。但 n = 3 vs 3 的样本量有限，p 值不能作为强统计判断。",
   "",
   "---",
   "",
@@ -1124,30 +1098,35 @@ note_lines <- c(
   "- `myeloid_module_scores_per_cell.csv`：每个细胞的 module score（per-cell level）",
   "- `myeloid_module_scores_aggregated.csv`：按 sample_id/group/myeloid_clusters 聚合的均值表",
   "",
-  "主要观察（待人工根据实际输出填写）：",
-  "- 待填写...",
+  "主要观察：",
+  "- 中性粒细胞相关 cluster 的 `Neutrophil_score` 和 `Activated_neutrophil_score` 较高，符合其 S100a8/S100a9、Retnlg、Il1b、Cxcl2 等 marker 特征。",
+  "- Resident Kupffer cell 的 `Kupffer_resident_score` 明显较高，并伴随 Clec4f、Vsig4、Cd5l、C1qa/b/c 等经典 Kupffer marker，支持人工修正。",
+  "- Antigen-presenting macrophage / Mo-Mac 与 DC-like antigen-presenting myeloid 的 `Antigen_presentation_score` 较高，提示这部分细胞更适合放入“抗原呈递/免疫调节”功能模块，而不是简单归为促炎细胞。",
+  "- 当前 module score 更适合作为功能状态描述：炎症募集、抗原呈递、Kupffer 稳态、IFN-response、损伤应答。它不足以直接证明某类细胞“好”或“坏”。",
   "",
   "---",
   "",
   "## 9. 是否建议第四阶段进入 pseudotime",
   "",
-  "**当前决策：不自动启动 Monocle3 pseudotime。**",
+  "**当前决策：不将 Monocle3 pseudotime 作为第四阶段主线。**",
   "",
-  "原因：髓系 subcluster 之间主要是功能状态差异（Kupffer vs Mo-Mac vs neutrophil），",
-  "而非同一 lineage 的发育连续体。中性粒细胞各亚群（0/4/5/6/8/10/13）之间可能存在",
-  "一定的激活梯度，但并非严格的 pseudotime 轨迹。",
+  "原因：`myeloid_umap_by_subcluster.pdf` 显示髓系结构主要分成多个离散岛：",
+  "左侧为中性粒细胞相关状态，右侧为 Mo-Mac/DC-like 抗原呈递细胞，上方为 Resident Kupffer cell。",
+  "这些结构反映的是不同 lineage/功能状态的分离，而不是一条干净的连续发育路径。",
+  "中性粒细胞内部存在局部邻接和激活梯度，但不足以支撑全髓系 Monocle3 方向性叙事。",
   "",
   "替代方案：",
-  "- 使用 module score（Inflammatory/Activated/IFN-response）在 cluster 间比较功能状态趋势",
-  "- 使用 top marker 的表达模式描述激活/分化梯度",
+  "- 第四阶段改为 **APAP-Control functional comparison**：围绕每个主要细胞群/髓系亚群做组成变化、pseudobulk 差异表达、marker/module score 和通路解释。",
+  "- 使用 module score（Inflammatory/Activated/IFN-response/Antigen presentation/Kupffer resident）在 cluster 和 group 间比较功能状态趋势。",
+  "- 使用 top marker 的表达模式描述激活/损伤应答梯度，但不写成伪时间。",
   "",
   "**仅在以下情况下启动 Monocle3**：",
   "- UMAP 上中性粒细胞各亚群呈现明显的连续弧线结构",
   "- 或 Kupffer→Mo-Mac 之间存在清晰的过渡路径",
   "- 选择 root 需要明确的生物学依据（如选择 resident Kupffer 作为起始点）",
   "",
-  "如果第四阶段确认进入 pseudotime，建议仅对中性粒细胞 lineage 或 Kupffer/Mo-Mac lineage",
-  "分别独立运行，而非将所有髓系细胞混合跑 pseudotime。",
+  "如果后续补充 pseudotime，建议仅对中性粒细胞 lineage 或 Kupffer/Mo-Mac lineage",
+  "分别独立试跑，作为补充分析，而非项目主线。",
   "",
   "---",
   "",
@@ -1184,6 +1163,5 @@ message("  1. Review myeloid_umap_res_0.2/0.4/0.6/0.8.pdf and choose resolution"
 message("  2. Review marker expression in DotPlot and FeaturePlot outputs")
 message("  3. Fill in manual_myeloid_annotation in Section F")
 message("  4. Re-run proportion comparison after annotation is stable")
-message("  5. Review module score trends before deciding on Stage 4 (pseudotime)")
-message("  6. If trajectory structure is unclear, prefer module scores / marker trends over Monocle3")
-
+message("  5. Use Stage 4 for APAP-Control functional comparison rather than default pseudotime")
+message("  6. Keep Monocle3 only as an optional follow-up if a local lineage shows a stable continuous structure")

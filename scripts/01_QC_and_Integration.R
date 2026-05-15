@@ -26,18 +26,8 @@ library(future)
 plan("sequential")
 options(future.globals.maxSize = 8000 * 1024^2)
 
-# Determine project root from script path (works under Rscript)
-script_args <- commandArgs(trailingOnly = FALSE)
-file_arg    <- grep("^--file=", script_args, value = TRUE)
-script_path <- sub("^--file=", "", file_arg)
-if (length(script_path) == 0) {
-  # Fallback: assume CWD is project root
-  PROJ_ROOT <- getwd()
-} else {
-  PROJ_ROOT <- normalizePath(file.path(dirname(script_path), ".."))
-}
+PROJ_ROOT <- getwd()
 setwd(PROJ_ROOT)
-message("Project root: ", PROJ_ROOT)
 
 DATA_DIR   <- file.path(PROJ_ROOT, "data", "external")
 PROC_DIR   <- file.path(PROJ_ROOT, "data", "processed", "01_QC_and_Integration")

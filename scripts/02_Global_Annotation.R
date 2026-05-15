@@ -37,17 +37,8 @@ library(future)
 plan("sequential")
 options(future.globals.maxSize = 8000 * 1024^2)
 
-# --- project root from script path ---
-script_args <- commandArgs(trailingOnly = FALSE)
-file_arg    <- grep("^--file=", script_args, value = TRUE)
-script_path <- sub("^--file=", "", file_arg)
-if (length(script_path) == 0) {
-  PROJ_ROOT <- getwd()
-} else {
-  PROJ_ROOT <- normalizePath(file.path(dirname(script_path), ".."))
-}
+PROJ_ROOT <- getwd()
 setwd(PROJ_ROOT)
-message("Project root: ", PROJ_ROOT)
 
 # --- directories ---
 PROC_DIR   <- file.path(PROJ_ROOT, "data", "processed", "02_Global_Annotation")

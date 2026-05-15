@@ -30,15 +30,6 @@
 # 0. Setup
 # -------------------------------------------------------------------------
 
-# --- Check conda environment ---
-current_env <- Sys.getenv("CONDA_DEFAULT_ENV")
-if (current_env != "singlecell") {
-  stop("Current conda environment is '", current_env,
-       "'. Please activate 'singlecell' environment:\n",
-       "  conda activate singlecell")
-}
-message("conda environment: ", current_env)
-
 library(Seurat)
 library(ggplot2)
 library(patchwork)
@@ -51,19 +42,9 @@ library(RColorBrewer)
 library(ggrepel)
 library(edgeR)
 
-# --- project root from script path ---
-script_args <- commandArgs(trailingOnly = FALSE)
-file_arg    <- grep("^--file=", script_args, value = TRUE)
-script_path <- sub("^--file=", "", file_arg)
-if (length(script_path) == 0) {
-  PROJ_ROOT <- getwd()
-} else {
-  PROJ_ROOT <- normalizePath(file.path(dirname(script_path), ".."))
-}
+PROJ_ROOT <- getwd()
 setwd(PROJ_ROOT)
-message("Project root: ", PROJ_ROOT)
 
-# --- directories ---
 PROC_DIR <- file.path(PROJ_ROOT, "data", "processed", "04_APAP_Control_Functional_Comparison")
 FIG_DIR  <- file.path(PROJ_ROOT, "results", "figures",   "04_APAP_Control_Functional_Comparison")
 TAB_DIR  <- file.path(PROJ_ROOT, "results", "tables",    "04_APAP_Control_Functional_Comparison")
@@ -72,72 +53,19 @@ dir.create(PROC_DIR, recursive = TRUE, showWarnings = FALSE)
 dir.create(FIG_DIR,  recursive = TRUE, showWarnings = FALSE)
 dir.create(TAB_DIR,  recursive = TRUE, showWarnings = FALSE)
 
-# --- colour palettes ---
 group_cols <- c("Control" = "#377eb8", "APAP" = "#e41a1c")
 
-# -------------------------------------------------------------------------
-# 0a. Input file validation
-# -------------------------------------------------------------------------
-
-# RDS inputs (required)
 STAGE2_RDS  <- file.path(PROJ_ROOT, "data", "processed", "02_Global_Annotation", "seurat_annotated.rds")
 STAGE3_RDS  <- file.path(PROJ_ROOT, "data", "processed", "03_Myeloid_Subclustering", "myeloid_subclustered.rds")
 
-# Table inputs (from Stage 2 & 3)
 GLOB_PROP_CSV  <- file.path(PROJ_ROOT, "results", "tables", "02_Global_Annotation", "celltype_proportions_by_sample.csv")
 GLOB_WILCOX_CSV <- file.path(PROJ_ROOT, "results", "tables", "02_Global_Annotation", "celltype_proportion_wilcox.csv")
 MYE_PROP_CSV   <- file.path(PROJ_ROOT, "results", "tables", "03_Myeloid_Subclustering", "myeloid_subcluster_proportions_by_sample.csv")
 MYE_WILCOX_CSV <- file.path(PROJ_ROOT, "results", "tables", "03_Myeloid_Subclustering", "myeloid_subcluster_proportion_wilcox.csv")
 MYE_SCORE_CSV  <- file.path(PROJ_ROOT, "results", "tables", "03_Myeloid_Subclustering", "myeloid_module_scores_aggregated.csv")
 
-required_files <- c(
-  "Stage2 RDS"                   = STAGE2_RDS,
-  "Stage3 RDS"                   = STAGE3_RDS,
-  "Global proportions"           = GLOB_PROP_CSV,
-  "Global Wilcoxon"              = GLOB_WILCOX_CSV,
-  "Myeloid proportions"          = MYE_PROP_CSV,
-  "Myeloid Wilcoxon"             = MYE_WILCOX_CSV,
-  "Myeloid module scores"        = MYE_SCORE_CSV
-)
-
-missing_files <- c()
-for (nm in names(required_files)) {
-  fpath <- required_files[nm]
-  if (!file.exists(fpath)) {
-    missing_files <- c(missing_files, sprintf("  [%s] %s", nm, fpath))
-  }
-}
-if (length(missing_files) > 0) {
-  stop("The following required input files are missing:\n",
-       paste(missing_files, collapse = "\n"),
-       "\nPlease run earlier stages first.")
-}
-message("All ", length(required_files), " required input files found.")
-
-# --- Load RDS objects ---
-message("Loading Stage 2 global object ...")
-merged <- readRDS(STAGE2_RDS)
-message("  ", ncol(merged), " cells x ", nrow(merged), " genes")
-
-message("Loading Stage 3 myeloid object ...")
+merged  <- readRDS(STAGE2_RDS)
 myeloid <- readRDS(STAGE3_RDS)
-message("  ", ncol(myeloid), " cells x ", nrow(myeloid), " genes")
-
-# Validate metadata columns in global object
-global_req_meta <- c("celltype_manual", "sample_id", "group")
-global_missing <- setdiff(global_req_meta, colnames(merged@meta.data))
-if (length(global_missing) > 0) {
-  stop("Missing metadata in global object: ", paste(global_missing, collapse = ", "))
-}
-
-# Validate metadata columns in myeloid object
-mye_req_meta <- c("myeloid_subtype", "sample_id", "group")
-mye_missing <- setdiff(mye_req_meta, colnames(myeloid@meta.data))
-if (length(mye_missing) > 0) {
-  stop("Missing metadata in myeloid object: ", paste(mye_missing, collapse = ", "))
-}
-
-message("Input validation complete.\n")
 
 # .........................................................................
 # Parameters (centralised)

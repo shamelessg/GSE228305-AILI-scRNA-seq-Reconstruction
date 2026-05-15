@@ -14,7 +14,7 @@ data/
     01_QC_and_Integration/
     02_Global_Annotation/
     03_Myeloid_Subclustering/
-    04_Pseudotime_Trajectory/
+    04_APAP_Control_Functional_Comparison/
     05_Cell_Communication/
 
 results/
@@ -22,20 +22,20 @@ results/
     01_QC_and_Integration/
     02_Global_Annotation/
     03_Myeloid_Subclustering/
-    04_Pseudotime_Trajectory/
+    04_APAP_Control_Functional_Comparison/
     05_Cell_Communication/
   tables/
     01_QC_and_Integration/
     02_Global_Annotation/
     03_Myeloid_Subclustering/
-    04_Pseudotime_Trajectory/
+    04_APAP_Control_Functional_Comparison/
     05_Cell_Communication/
 
 scripts/
   01_QC_and_Integration.R
   02_Global_Annotation.R
   03_Myeloid_Subclustering.R
-  04_Pseudotime_Trajectory.R
+  04_APAP_Control_Functional_Comparison.R
   05_Cell_Communication.R
 ```
 
@@ -62,14 +62,14 @@ scripts/
 - 不预设 APAP 组一定出现某类细胞大规模扩增。
 - 不预设髓系细胞一定是最终主线；它只是最优先检查的候选方向。
 - 不预设一定能分出清晰的促炎型和修复型巨噬细胞。
-- 不预设 Monocle3 一定能形成可信轨迹。
+- 不预设 Monocle3 一定能形成可信轨迹；当前阶段将拟时序降级为可选补充分析。
 - 不预设 CellChat 一定能给出特定通路故事。
 
 ### 分支与止损规则
 
 - 如果全局注释后髓系细胞数量过少、marker 不清楚或组间变化不明显，Stage 3 应转向数据中更稳定的非实质细胞群，例如内皮细胞、T/NK 细胞、B 细胞或其他变化明显群体。
 - 如果二次聚类只产生技术噪声或过度碎片化 cluster，应降低 resolution 或停止高分辨率拆分，改为粗粒度状态比较。
-- 如果拟时序轨迹对 root、降维或亚群选择高度敏感，Stage 4 应降级为 marker/module score 沿状态变化的描述，不强行解释方向性演化。
+- 当前 Stage 3 的髓系 UMAP 不支持单一连续轨迹，Stage 4 已调整为 APAP-Control 功能比较；如后续补充拟时序，必须先证明局部 lineage 存在稳定连续结构。
 - 如果 CellChat 结果主要由低细胞数亚群、少数离群基因或背景通路驱动，Stage 5 应只保留表格结果或作为补充，不画夸张网络图。
 - README 只总结数据实际支持的发现；候选假设、阴性结果和不稳定分析可以在 notes 中诚实记录。
 
@@ -93,8 +93,9 @@ scripts/
 - 批次整合：`harmony`
 - 可视化：`ggplot2`、`patchwork`、`cowplot`、`RColorBrewer`
 - 数据整理：`dplyr`、`tidyr`、`readr`、`tibble`
-- 富集分析：`clusterProfiler`、`org.Mm.eg.db`、`msigdbr` 或 `GSVA`
-- 拟时序：`monocle3`
+- 富集分析和功能评分：`clusterProfiler`、`org.Mm.eg.db`、`msigdbr`、`GSVA` 或 `UCell`
+- 伪重复控制/差异表达：优先使用 sample-level pseudobulk，可根据实际环境选择 `DESeq2`、`edgeR`、`limma` 或保守的样本聚合统计
+- 拟时序：`monocle3` 仅作为可选补充，不作为当前主线依赖
 - 细胞通讯：`CellChat`
 
 具体版本以实际成功运行为准，不在脚本完成前硬写死。
@@ -198,17 +199,17 @@ GSE228305 当前使用 6 个样本：
 
 **输出对象**：
 
-- `data/processed/02_Global_Annotation/seurat_annotated_global.rds`
+- `data/processed/02_Global_Annotation/seurat_annotated.rds`
 
 **输出图表**：
 
-- `results/figures/02_Global_Annotation/global_umap_by_cluster.pdf`
-- `results/figures/02_Global_Annotation/global_umap_by_celltype.pdf`
-- `results/figures/02_Global_Annotation/global_marker_dotplot.pdf`
-- `results/figures/02_Global_Annotation/celltype_fraction_by_group.pdf`
+- `results/figures/02_Global_Annotation/umap_by_cluster.pdf`
+- `results/figures/02_Global_Annotation/umap_by_celltype.pdf`
+- `results/figures/02_Global_Annotation/dotplot_canonical_markers.pdf`
+- `results/figures/02_Global_Annotation/celltype_proportion_grouped.pdf`
 - `results/tables/02_Global_Annotation/global_cluster_markers.csv`
-- `results/tables/02_Global_Annotation/global_annotation_table.csv`
-- `results/tables/02_Global_Annotation/celltype_fraction_by_sample.csv`
+- `results/tables/02_Global_Annotation/preliminary_cluster_annotation.csv`
+- `results/tables/02_Global_Annotation/celltype_proportions_by_sample.csv`
 
 ## 7. Stage 3: Focused Subclustering
 
@@ -218,7 +219,7 @@ GSE228305 当前使用 6 个样本：
 
 **输入**：
 
-- `data/processed/02_Global_Annotation/seurat_annotated_global.rds`
+- `data/processed/02_Global_Annotation/seurat_annotated.rds`
 
 **核心步骤**：
 
@@ -239,7 +240,7 @@ GSE228305 当前使用 6 个样本：
 
 **输出对象**：
 
-- `data/processed/03_Myeloid_Subclustering/seurat_myeloid_final.rds`
+- `data/processed/03_Myeloid_Subclustering/myeloid_subclustered.rds`
 
 **输出图表**：
 
@@ -247,47 +248,57 @@ GSE228305 当前使用 6 个样本：
 - `results/figures/03_Myeloid_Subclustering/myeloid_umap_by_group.pdf`
 - `results/figures/03_Myeloid_Subclustering/myeloid_marker_heatmap.pdf`
 - `results/figures/03_Myeloid_Subclustering/myeloid_function_enrichment_dotplot.pdf`
-- `results/tables/03_Myeloid_Subclustering/myeloid_subcluster_markers.csv`
-- `results/tables/03_Myeloid_Subclustering/myeloid_annotation_table.csv`
-- `results/tables/03_Myeloid_Subclustering/myeloid_enrichment_results.csv`
+- `results/tables/03_Myeloid_Subclustering/myeloid_cluster_markers.csv`
+- `results/tables/03_Myeloid_Subclustering/myeloid_preliminary_subcluster_annotation.csv`
+- `results/tables/03_Myeloid_Subclustering/myeloid_module_scores_aggregated.csv`
 
 如果最终目标细胞群不是髓系，文件名可暂时保留以维持五阶段结构，但表格中必须用 `target_celltype` 或类似字段说明真实分析对象。
 
-## 8. Stage 4: Pseudotime Trajectory
+## 8. Stage 4: APAP-Control Functional Comparison
 
-**脚本**：`scripts/04_Pseudotime_Trajectory.R`
+**脚本**：`scripts/04_APAP_Control_Functional_Comparison.R`
+
+**当前决策**：Stage 3 的髓系 UMAP 不支持把全部髓系细胞解释为单一连续轨迹，因此 Stage 4 从 Monocle3 pseudotime 改为 APAP-Control 功能比较。拟时序保留为可选补充，只在中性粒或 macrophage/Kupffer 局部 lineage 出现清楚连续结构时再单独尝试。
 
 **输入**：
 
-- `data/processed/03_Myeloid_Subclustering/seurat_myeloid_final.rds`
+- `data/processed/02_Global_Annotation/seurat_annotated.rds`
+- `data/processed/03_Myeloid_Subclustering/myeloid_subclustered.rds`
+- Stage 2/3 已输出的 composition 和 marker/module score 表格
 
 **核心步骤**：
 
-1. `readRDS()` 读取髓系细胞对象。
-2. 先判断目标细胞群是否存在连续状态变化：UMAP 是否呈连续结构，marker 是否呈梯度，亚群是否能形成合理过渡。
-3. 若适合轨迹分析，转换为 Monocle3 `cell_data_set`。
-4. 继承 Seurat 中的 UMAP 坐标和亚群注释，减少重复降维带来的解释偏移。
-5. `learn_graph()` 学习轨迹结构。
-6. 基于生物学假设人工指定 root cells。
-7. 绘制伪时间轨迹和关键基因随伪时间变化曲线。
-8. 若轨迹结构不稳定，输出状态评分或 marker 趋势图作为替代，不强行解释伪时间方向。
+1. `readRDS()` 读取全局注释对象和髓系二次聚类对象。
+2. 检查关键 metadata 是否存在：`sample_id`、`group`、`celltype_manual`、`myeloid_subtype`。
+3. 整理 Stage 2/3 已有的样本级比例结果，输出统一的 APAP-Control composition summary。
+4. 对主要 cell type 和髓系 subtype 做 sample-level pseudobulk 差异表达；细胞数或有效样本不足的群体跳过并记录原因。
+5. 构建小型、可解释的功能基因集，计算 per-cell module score，并按 sample/group/cell type 聚合。
+6. 对稳定改变的细胞群进行通路富集或 marker 程序解释，优先关注炎症募集、IL1/TNF、IFN-response、抗原呈递、Kupffer resident identity、吞噬清除、内皮激活和组织修复。
+7. 输出用于 README 的精简结论表：每个细胞群在 APAP 中是上升/下降，主要功能程序如何变化，证据来自哪张图/哪张表。
 
 **人工决策点**：
 
-- root 不能由代码自动决定。只有在轨迹结构稳定时才指定 root；候选 root 应来自明确的生物学假设和 marker 证据。
-- 如果不同 root 或参数导致完全不同解释，应停止使用强方向性叙事。
+- 不能把某个细胞群简单写成“好”或“坏”。应描述为可能促损伤、可能保护/修复、可能免疫调节，并说明对应表达证据。
+- pseudobulk 以样本为重复单位，避免把单细胞数当作独立生物学重复。
+- 小细胞数、疑似 doublet、ambient-contaminated cluster 不进入主结论。
+- 如果某细胞群只有合并细胞层面的差异、但样本间不稳定，应降级为候选观察。
 
 **输出对象**：
 
-- `data/processed/04_Pseudotime_Trajectory/monocle_cds.rds`
+- `data/processed/04_APAP_Control_Functional_Comparison/seurat_functional_comparison.rds`
 
 **输出图表**：
 
-- `results/figures/04_Pseudotime_Trajectory/myeloid_pseudotime_umap.pdf`
-- `results/figures/04_Pseudotime_Trajectory/myeloid_trajectory_by_state.pdf`
-- `results/figures/04_Pseudotime_Trajectory/key_gene_pseudotime_trends.pdf`
-- `results/tables/04_Pseudotime_Trajectory/pseudotime_cell_metadata.csv`
-- `results/tables/04_Pseudotime_Trajectory/pseudotime_genes.csv`
+- `results/figures/04_APAP_Control_Functional_Comparison/composition_delta_summary.pdf`
+- `results/figures/04_APAP_Control_Functional_Comparison/myeloid_function_scores_by_group.pdf`
+- `results/figures/04_APAP_Control_Functional_Comparison/key_celltype_function_scores_by_group.pdf`
+- `results/figures/04_APAP_Control_Functional_Comparison/pseudobulk_volcano_selected_celltypes.pdf`
+- `results/figures/04_APAP_Control_Functional_Comparison/function_heatmap_selected_celltypes.pdf`
+- `results/tables/04_APAP_Control_Functional_Comparison/composition_delta_summary.csv`
+- `results/tables/04_APAP_Control_Functional_Comparison/pseudobulk_de_by_celltype.csv`
+- `results/tables/04_APAP_Control_Functional_Comparison/pseudobulk_de_by_myeloid_subtype.csv`
+- `results/tables/04_APAP_Control_Functional_Comparison/module_scores_by_sample.csv`
+- `results/tables/04_APAP_Control_Functional_Comparison/stage4_interpretation_summary.csv`
 
 ## 9. Stage 5: Cell Communication
 
@@ -295,22 +306,23 @@ GSE228305 当前使用 6 个样本：
 
 **输入**：
 
-- `data/processed/03_Myeloid_Subclustering/seurat_myeloid_final.rds`
-- 必要时可读取 `data/processed/02_Global_Annotation/seurat_annotated_global.rds` 用于非髓系互作背景。
+- `data/processed/04_APAP_Control_Functional_Comparison/seurat_functional_comparison.rds`
+- 必要时可读取 `data/processed/02_Global_Annotation/seurat_annotated.rds` 用于全局非实质细胞互作背景。
+- 第四阶段筛出的稳定细胞群、功能轴和候选配体/受体表。
 
 **核心步骤**：
 
-1. `readRDS()` 读取最终注释对象。
-2. 构建 CellChat 对象，按 group 或 condition 分别分析 Control/APAP。
+1. `readRDS()` 读取最终注释对象和第四阶段 summary。
+2. 构建 CellChat 对象，按 group 或 condition 分别分析 Control/APAP；优先使用第四阶段筛出的可靠细胞群。
 3. 使用小鼠配体-受体数据库。
 4. 计算通讯概率、过滤低细胞数亚群导致的不稳定互作。
-5. 优先审查炎症、趋化、吞噬、细胞迁移和修复相关通路，但不预设一定出现。
+5. 优先审查炎症、趋化、吞噬、细胞迁移、抗原呈递、内皮激活和修复相关通路，但不预设一定出现。
 6. 输出精简图，而不是展示所有通路。
 7. 若通讯结果不稳定或缺乏清楚解释，只输出筛选表格或作为补充结果。
 
 **人工决策点**：
 
-- CellChat 会产生大量背景信号。最终展示应围绕明确问题：哪些细胞发送信号，哪些细胞接收信号，这些互作是否被样本和表达证据支持。
+- CellChat 会产生大量背景信号。最终展示应围绕第四阶段形成的明确问题：哪些细胞发送信号，哪些细胞接收信号，这些互作是否被样本和表达证据支持。
 - 可重点审查 CSF、CCL/CXCL、GAS、TGFb、SPP1、MIF 等通路，但最终保留哪些必须由结果和文献共同决定；没有稳定信号时不要硬画故事图。
 
 **输出对象**：
