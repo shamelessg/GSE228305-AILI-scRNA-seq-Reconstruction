@@ -1,108 +1,115 @@
-# Note 2: Annotation and Myeloid Subclustering
+# 笔记 2：细胞注释与髓系二次聚类
 
-## Purpose
+## 目的
 
-This note records how the global cell annotation was made, why myeloid cells were selected for focused subclustering, and which labels should be treated as working annotations rather than final cell identities.
+这份笔记记录全局细胞注释如何完成，为什么选择髓系细胞继续二次聚类，以及哪些标签只能视为工作注释。
 
-The main idea was to move from a global atlas to a focused APAP-relevant compartment without pretending that marker-based annotation is absolute.
+本阶段的核心不是自动给每个细胞簇贴标签，而是结合标记基因、表达图、组织背景和疾病背景，逐步判断哪些细胞群值得进一步分析。
 
-## Global Clustering Decision
+## 全局聚类分辨率选择
 
-Four resolutions were compared during global clustering:
+全局聚类比较了 4 个聚类分辨率：
 
-| Resolution | Cluster number |
+| 聚类分辨率 | 细胞簇数量 |
 |---|---:|
 | 0.2 | 21 |
 | 0.4 | 27 |
 | 0.6 | 34 |
 | 0.8 | 39 |
 
-Resolution 0.4 was selected for global annotation. It gave enough separation between major lineages while avoiding excessive fragmentation. At this stage, the goal was not to define every fine subtype, but to obtain stable broad cell classes for downstream comparison.
+最终选择分辨率 0.4。原因是它能够较好地区分主要细胞谱系，同时没有把全局细胞类型切得过碎。
 
-The selected resolution separated major liver non-parenchymal and immune populations, including T cells, B cells, NK cells, Kupffer cells, monocyte-derived macrophage/DC-like cells, neutrophil-related populations, endothelial cells, cholangiocyte/epithelial cells and stromal cells.
+这一阶段的目标是粗粒度注释，而不是定义所有精细亚群。因此分辨率不应过高。全局层面更需要稳定识别 T 细胞、B 细胞、NK 细胞、髓系、内皮、上皮和基质细胞等主要群体。
 
-## Marker-Based Annotation Logic
+## 标记基因注释逻辑
 
-Cell labels were assigned by combining cluster markers, canonical marker expression, DotPlot/FeaturePlot patterns and biological context.
+细胞注释不是只看标记基因表第一名，而是综合：
 
-Representative marker logic:
+- 细胞簇富集基因；
+- 经典标记基因；
+- DotPlot 和 FeaturePlot 表达模式；
+- 标记基因是否在同一个细胞簇内共同表达；
+- 该细胞类型是否符合肝脏非实质细胞和 APAP 损伤背景；
+- 细胞簇是否在多个样本中稳定出现。
 
-| Cell type | Marker evidence |
+在实际操作中，主要标记基因判断如下：
+
+| 细胞类型 | 主要依据 |
 |---|---|
-| T cell | `Trac`, `Cd3d`, `Tcf7`, `Il7r` |
-| B cell | `Ms4a1`, `Cd79a`, `Cd79b`, `Pax5` |
-| NK cell | `Ncr1`, `Klra` genes, `Gzma`, `Prf1` |
-| Kupffer cell | `Clec4f`, `Vsig4`, `Cd5l`, `Folr2`, `Cd163` |
-| Monocyte-derived macrophage / DC-like | `Lyz2`, `Cx3cr1`, `Fcgr1`, `Cd209a`, `Clec4` genes |
-| Neutrophil | `S100a8`, `S100a9`, `Cxcr2`, `Csf3r`, `Ltf`, `Camp`, `Ly6g` |
-| Endothelial | `Pecam1`, `Cdh5`, `Kdr`, `Lyve1`, `Stab2` |
-| Cholangiocyte / epithelial | `Epcam`, `Krt8`, `Krt18`, `Krt19` |
-| Fibroblast / stellate | `Dpt`, `Lum`, `Pdgfra`, `Mmp2`, `Tcf21` |
+| T 细胞 | `Trac`, `Cd3d`, `Tcf7`, `Il7r` |
+| B 细胞 | `Ms4a1`, `Cd79a`, `Cd79b`, `Pax5` |
+| NK 细胞 | `Ncr1`, `Klra` 基因家族, `Gzma`, `Prf1` |
+| Kupffer 细胞 | `Clec4f`, `Vsig4`, `Cd5l`, `Folr2`, `Cd163` |
+| 单核来源巨噬细胞 / DC 样细胞 | `Lyz2`, `Cx3cr1`, `Fcgr1`, `Cd209a`, `Clec4` 基因家族 |
+| 中性粒细胞 | `S100a8`, `S100a9`, `Cxcr2`, `Csf3r`, `Ltf`, `Camp`, `Ly6g` |
+| 内皮细胞 | `Pecam1`, `Cdh5`, `Kdr`, `Lyve1`, `Stab2` |
+| 胆管 / 上皮细胞 | `Epcam`, `Krt8`, `Krt18`, `Krt19` |
+| 成纤维 / 星状细胞 | `Dpt`, `Lum`, `Pdgfra`, `Mmp2`, `Tcf21` |
 
-Annotation was treated as a biological judgement step, not an automatic output from a marker table.
 
-## Uncertain Global Clusters
+## 全局注释中的不确定群体
 
-Several clusters were marked as uncertain:
+以下细胞簇在解释时需要谨慎：
 
-- Low-quality or mixed clusters with high mitochondrial/ribosomal/stress signals.
-- B cell clusters carrying hepatocyte ambient RNA signals such as `Alb`, `Apoa1` and `Ttr`.
-- Cytotoxic T/NK-like clusters where CD8 T and NK markers overlapped.
-- Rare mast/basophil-like clusters with limited cell number.
+- 高线粒体、核糖体或应激信号的低质量 / 混合细胞簇。
+- 同时带有 B 细胞标记基因和肝细胞基因 `Alb`, `Apoa1`, `Ttr` 的疑似环境 RNA 或双细胞簇。
+- 同时具有 CD8 T 细胞和 NK 细胞特征的细胞毒性 T / NK 样细胞簇。
+- 细胞数较少的肥大细胞 / 嗜碱样细胞簇。
 
-These clusters were not used as strong biological anchors.
+这些群体不适合作为后续生物学结论的依据。
 
-## Why Myeloid Cells Were Selected
+## 为什么选择髓系细胞深入
 
-Myeloid cells were selected for focused subclustering because they are central to APAP-induced acute liver injury. The global annotation identified several relevant populations:
+APAP 急性肝损伤中，髓系细胞是非常核心的响应群体。全局注释已经识别出多个相关细胞群：
 
-- inflammatory neutrophils;
-- activated neutrophils;
-- mature neutrophils;
-- Kupffer cells;
-- monocyte-derived macrophage / DC-like cells.
+- 炎症性中性粒细胞；
+- 活化中性粒细胞；
+- 成熟中性粒细胞；
+- Kupffer 细胞；
+- 单核来源巨噬细胞 / DC 样细胞。
 
-Together, these cells formed a large enough compartment for subclustering and showed APAP-related composition trends. This made myeloid cells a stronger focus than lymphoid or stromal populations for this dataset.
+这些细胞总量足够，标记基因相对清晰，并且在 APAP vs Control 中已经出现组成变化趋势。因此，髓系细胞比淋巴细胞或基质细胞更适合作为第三阶段的重点。
 
-## Myeloid Subclustering Decision
+## 髓系二次聚类分辨率选择
 
-In the myeloid object, four resolutions were compared:
+髓系对象中同样比较了 4 个聚类分辨率：
 
-| Resolution | Cluster number |
+| 聚类分辨率 | 细胞簇数量 |
 |---|---:|
 | 0.2 | 10 |
 | 0.4 | 16 |
 | 0.6 | 20 |
 | 0.8 | 21 |
 
-Resolution 0.4 was selected again, but for a different reason than in the global object. Here it provided enough granularity to distinguish Kupffer, monocyte-derived macrophage/DC-like and several neutrophil states, while avoiding excessive splitting of small or noisy clusters.
+最终选择分辨率 0.4。这里与全局注释不同，二次聚类的目标是看髓系内部异质性，因此需要比全局注释更细。但过高分辨率会把小群体和噪声切得太碎，不利于解释。
 
-## Working Myeloid Labels
+分辨率 0.4 能够区分 Kupffer 细胞、单核来源巨噬细胞 / DC 样细胞和多个中性粒细胞状态，粒度相对合适。
 
-The final myeloid labels were working annotations. The most important groups were:
+## 髓系工作注释
 
-- Inflammatory neutrophil
-- Activated neutrophil
-- Mature neutrophil
-- IFN-responsive inflammatory neutrophil
-- Resident Kupffer cell
-- Monocyte-derived macrophage
-- Antigen-presenting macrophage / Mo-Mac
-- DC-like antigen-presenting myeloid
-- Cycling neutrophil
+主要髓系标签包括：
 
-Several manual corrections were important:
+- 炎症性中性粒细胞
+- 活化中性粒细胞
+- 成熟中性粒细胞
+- IFN 响应性炎症中性粒细胞
+- 驻留 Kupffer 细胞
+- 单核来源巨噬细胞
+- 抗原呈递型巨噬细胞 / 单核来源巨噬细胞
+- DC 样抗原呈递髓系细胞
+- 增殖中性粒细胞
 
-- A cluster initially resembling monocyte-derived macrophage was revised to Resident Kupffer cell because it strongly expressed `Clec4f`, `Vsig4` and `Timd4`.
-- A neutrophil-like cluster carrying high hepatocyte ambient markers was labeled as possible doublet or ambient-contaminated neutrophil.
-- A proliferative neutrophil cluster was identified by `Mki67`, `Top2a` and `Stmn1`.
+几个重要人为修正：
 
-## Interpretation Boundary
+- 某个细胞簇自动结果偏向单核来源巨噬细胞，但人工复核发现 `Clec4f`, `Vsig4`, `Timd4` 表达很强，因此修正为驻留 Kupffer 细胞。
+- 某些中性粒样细胞簇同时带有明显肝细胞环境 RNA 信号，因此标记为疑似双细胞或环境 RNA 污染中性粒细胞。
+- 一个增殖相关细胞簇高表达 `Mki67`, `Top2a`, `Stmn1`，因此标记为增殖中性粒细胞。
 
-The myeloid annotation supports exploratory analysis, but not publication-level cell identity claims by itself.
+## 解释边界
 
-The safest conclusion from this stage is:
+本阶段支持的是探索性注释，不是最终细胞身份裁决。
 
-> APAP samples show a shift toward neutrophil-related myeloid states, while Kupffer and antigen-presenting myeloid compartments show composition or transcriptional changes that require cautious interpretation.
+稳妥的结论是：
 
-This stage justified moving into functional comparison rather than treating the subclusters as final mechanistic discoveries.
+> APAP 样本中髓系组成更偏向中性粒细胞相关状态，同时 Kupffer 细胞和抗原呈递髓系细胞出现组成或转录状态变化。
+

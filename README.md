@@ -12,14 +12,14 @@
 ## 单细胞流程与探索性科研分析：APAP 急性肝损伤免疫微环境重构
 
 本项目为本人大三上学期进行的第二个生信实践项目，聚焦单细胞组学分析。  
-受限于样本数量与广度，本项目不同于项目一，并不是一个完整的故事复现，而是具有相当的开放性，得到一些探索性结论。
+受限于样本数量与广度，本项目并不是一个完整的故事复现，而是具有相当的开放性，得到一些探索性结论。  
 希望以此展示我生信学习的过程与已学到的科学技能与思维。  
 
 ## Project Overall Introduction / 项目整体介绍
 
 本项目为 **GSE228305** 数据集（3APAP VS 3 Control）的单细胞 RNA-seq 分析流程。 （数据介绍见 data_description） 
 研究对象是 APAP 诱导急性肝损伤后，肝脏非实质细胞，尤其是免疫细胞和髓系细胞的组成与功能状态变化。  
-参考文献：(<Type I interferon signaling facilitates resolution of acute liver injury by priming macrophage polarization.pdf>)
+> *参考文献：Type I interferon signaling facilitates resolution of acute liver injury by priming macrophage polarization.pdf*
 
 项目核心问题是：
 
@@ -27,7 +27,7 @@
 
 当前比较稳妥的结论是：APAP 处理后存在中性粒细胞相关群体扩张，同时 Kupffer cell、endothelial cell 和部分髓系抗原呈递/巨噬细胞群体出现转录状态变化。但这些结果仍属于探索性发现，不能写成已经验证的机制。
 
-这个项目的重点不是“跑出一个漂亮结论”，也不是强行复现某个固定故事，而是保留真实分析中的判断过程：
+这个项目保留了真实分析中的判断过程：
 
 - QC 阈值需要结合图形人工判断；
 - 聚类 resolution 需要比较不同粒度；

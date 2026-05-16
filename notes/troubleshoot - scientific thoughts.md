@@ -1,119 +1,115 @@
-# Troubleshooting and Scientific Thoughts
+# 问题记录与科学思考
 
-This note records questions that came up during the project. They are not polished conclusions. They are the kinds of practical and scientific questions that decide whether a single-cell project is believable.
+这里记录项目中反复遇到、也真正影响结果可信度的问题。它们不是最终结论，而是做单细胞分析时必须不断追问的判断点。
 
-## 1. How should clustering resolution be selected?
+## 1. 细胞簇的聚类分辨率应该怎么选？
 
-Resolution is not simply "higher is better".
+聚类分辨率不是越高越好。
 
-A low resolution may merge biologically different cell types. A high resolution may split one cell type into many small clusters that are driven by noise, sample bias, cell cycle or mitochondrial stress.
+太低的分辨率可能把不同细胞类型合并在一起；太高的分辨率可能把一个细胞类型切成很多小碎片，而这些小细胞簇可能只是噪音、样本差异、细胞周期或低质量信号。
 
-In this project, resolution was selected by asking:
+本项目选择分辨率时主要看：
 
-- Do known major lineages separate clearly?
-- Are small clusters supported by meaningful marker genes?
-- Does a cluster appear across multiple samples, or only in one sample?
-- Is the current stage asking for broad cell types or fine subtypes?
-- Does increasing resolution add biological information, or only fragment the map?
+- 主要细胞谱系是否能被清楚分开；
+- 小细胞簇是否有明确标记基因支持；
+- 这个细胞簇是否在多个样本中存在，而不是只来自单个样本；
+- 提高分辨率后增加的是生物学信息，还是只是碎片化。
 
-For global annotation, resolution should be coarse enough to identify major lineages. For myeloid subclustering, a slightly finer resolution is acceptable because the biological question is focused on internal heterogeneity.
+全局注释阶段应偏粗，先稳定识别主要细胞类型。髓系二次聚类阶段可以稍细，因为问题已经聚焦到髓系内部异质性。
+两次的resolution均选为0.4，符合标准。
 
-## 2. How can cluster marker genes be used to infer cell identity?
+## 2. 细胞簇的基因情况如何判断出细胞类别？
 
-A marker table is only a starting point. A cell label should come from a combination of:
+标记基因表只能作为起点，不能自动决定细胞身份。
 
-- top enriched genes;
-- canonical marker genes;
-- DotPlot and FeaturePlot expression patterns;
-- whether markers are co-expressed in the same cluster;
-- whether the label makes sense in tissue and disease context;
-- whether the cluster appears consistently across samples.
+比较可靠的注释需要同时看：
 
-For example, a Kupffer cell label is stronger when `Clec4f`, `Vsig4`, `Cd5l`, `Folr2` and complement genes appear together. A neutrophil label is stronger when `S100a8`, `S100a9`, `Cxcr2`, `Csf3r`, `Ltf`, `Camp` or `Ly6g` support the same direction.
+- 主要富集标记基因；
+- 已知经典标记基因；
+- DotPlot 和 FeaturePlot 中的表达模式；
+- 多个标记基因是否在同一个细胞簇中共同出现；
+- 该细胞类型是否符合肝脏组织背景和 APAP 损伤背景；
+- 这个细胞簇是否在多个样本中稳定出现。
 
-If a cluster expresses markers from two unrelated lineages, it may be a doublet, ambient RNA contamination or a transitional state. It should not be assigned a confident label too quickly.
+例如，Kupffer 细胞不能只靠一个基因判断。如果 `Clec4f`, `Vsig4`, `Cd5l`, `Folr2`, `Cd163` 等一起出现，可信度更高。中性粒细胞也类似，`S100a8`, `S100a9`, `Cxcr2`, `Csf3r`, `Ltf`, `Camp`, `Ly6g` 等共同支持时才更稳。
 
-## 3. How do I distinguish real biology from doublets or ambient RNA?
+如果一个细胞簇同时表达两个完全不同细胞谱系的标记基因，需要先怀疑双细胞、环境 RNA 或过渡状态，而不是急着起一个漂亮名字。
 
-Warning signs include:
+## 3. 如何区分真实生物学信号和双细胞 / 环境 RNA？
 
-- one cluster expressing markers from two very different lineages;
-- immune cells carrying strong hepatocyte genes such as `Alb`, `Apoa1` or `Ttr`;
-- very small clusters appearing mainly in one sample;
-- high mitochondrial or ribosomal/stress signals;
-- cluster identity depending on only one marker gene.
+需要警惕以下情况：
 
-In this project, some neutrophil-like clusters carried hepatocyte ambient signals. These were not used as main biological evidence. This is important because APAP liver injury can release abundant hepatic RNA, increasing the risk of ambient contamination.
+- 一个细胞簇同时表达两种不相关细胞谱系的标记基因；
+- 免疫细胞中出现很强的肝细胞基因，如 `Alb`, `Apoa1`, `Ttr`；
+- 某个小细胞簇主要来自单一样本；
+- 线粒体、核糖体或应激信号很高；
+- 细胞身份只依赖一个标记基因，而不是一组标记基因。
 
-## 4. When is pseudotime appropriate?
+APAP 肝损伤会造成肝细胞损伤，环境 RNA 风险本来就更高。因此，带有肝细胞环境 RNA 信号的中性粒样细胞簇不适合作为主要生物学结论。
 
-Pseudotime should not be used just because it can produce an attractive trajectory plot.
+## 4. 什么时候适合做拟时序？
 
-It is more appropriate when:
+拟时序不应该因为“能画出轨迹图”就使用。
 
-- cells form a visible continuous structure;
-- the biological process is expected to be gradual;
-- root selection has a clear biological basis;
-- marker genes change smoothly along the inferred path;
-- the trajectory is not just connecting unrelated lineages.
+比较适合做拟时序的情况是：
 
-In this project, the myeloid UMAP showed separated neutrophil, Kupffer and Mo-Mac/DC-like regions. That structure did not support one global myeloid pseudotime. Therefore, APAP-Control functional comparison was a better main analysis.
+- 细胞在 UMAP 或低维空间中形成连续结构；
+- 生物学过程本身预期是渐变的；
+- 起点的选择有明确生物学依据；
+- 标记基因沿轨迹有连续变化；
+- 轨迹不是强行连接几个无关细胞谱系。
 
-## 5. Why use pseudobulk instead of cell-level differential expression?
+本项目中，髓系细胞主要分成中性粒细胞、Kupffer 细胞、单核来源巨噬细胞 / DC 样细胞几个相对分离的区域。因此不适合强行做全髓系拟时序，改成 APAP-Control 功能比较更合理。
 
-Single cells from the same mouse are not independent biological replicates. Treating thousands of cells as thousands of independent samples can produce inflated significance.
+## 5. 为什么用伪批量差异分析，而不是直接做单细胞差异？
 
-Pseudobulk analysis aggregates cells within each sample and cell type. This makes the mouse/sample the unit of comparison, which is closer to the real experimental design.
+同一只小鼠里的几千个细胞不是几千个独立生物学重复。
 
-However, pseudobulk is still limited here because there are only 3 Control and 3 APAP samples. It is more reliable than cell-level tests, but still exploratory.
+如果直接把每个细胞当独立样本，很容易夸大显著性。伪批量分析的思路是先在每个样本、每个细胞类型内聚合 counts，再以样本作为比较单位。
 
-## 6. How should cell proportion changes be interpreted?
+这更接近真实实验设计。
 
-Cell proportions are relative. If neutrophils expand strongly, other cell types may appear to decrease even if their absolute numbers did not change.
+但伪批量分析也不是万能的。本项目只有 3 Control vs 3 APAP，因此即使用伪批量分析，结论仍然是探索性的。
 
-Therefore:
+## 6. 细胞比例变化应该怎么解释？
 
-- "proportion decreased" does not necessarily mean cell loss;
-- "proportion increased" does not necessarily mean local proliferation;
-- validation would need flow cytometry, tissue imaging or absolute cell counting.
+单细胞里的比例是相对比例，不是绝对数量。
 
-This is why endothelial and Kupffer proportion changes were interpreted cautiously.
+如果 APAP 后中性粒细胞大量增加，其他细胞类型的比例可能自然下降，即使它们的绝对数量没有减少。
 
-## 7. What does module score actually mean?
+所以：
 
-Module score is a summary of expression for a selected gene set. It does not directly prove pathway activation, protein activity or cell function.
+- “比例下降”不等于细胞真实减少；
+- “比例上升”不等于局部增殖；
+- 要证明绝对数量变化，需要流式、组织染色或绝对计数。
 
-A useful module score should:
+这也是为什么内皮细胞和 Kupffer 细胞的比例变化在本项目中都要谨慎解释。
 
-- use a small and interpretable gene set;
-- be checked at sample level, not only pooled-cell level;
-- be used as functional description, not mechanism proof;
-- be interpreted together with marker genes and DE results.
+## 7. 模块评分到底说明什么？
 
-In this project, module scores helped describe inflammatory, chemokine, IFN, antigen-presentation and Kupffer-resident programs, but they were not treated as direct evidence of pathway activity.
+模块评分是一组基因表达的概括，不等于通路真的被激活。
 
-## 8. What can CellChat or ligand-receptor analysis prove?
+比较合理的用法是：
 
-Ligand-receptor analysis can suggest possible communication axes, but it cannot prove real signaling.
+- 使用小而清楚的基因集；
+- 尽量看样本层面，而不是只看合并细胞；
+- 用它描述功能状态，而不是证明机制；
+- 和标记基因、差异表达、细胞比例一起解释。
 
-It does not directly measure:
+本项目中，模块评分用来辅助描述炎症、趋化、IFN、抗原呈递、Kupffer 稳态和修复相关程序，但不作为机制证明。
 
-- protein abundance;
-- ligand secretion;
-- receptor activation;
-- spatial proximity;
-- functional consequence.
+## 8. CellChat 或配体-受体分析能证明什么？
 
-Therefore, Stage 5 was designed as targeted screening rather than full mechanism discovery. Candidate pairs are useful for wet-lab follow-up, not final conclusions.
+本项目第五阶段只做靶向配体-受体筛查，而不是完整细胞通讯机制发现。
+它能提出候选互作，但不能证明真实通信。
 
-## 9. How strong is the evidence in this project?
+它不能直接证明：
 
-The strongest signal is APAP-associated neutrophil expansion. It appears consistently and matches APAP liver injury biology.
+- 蛋白水平；
+- 配体真的分泌；
+- 受体真的激活；
+- 两类细胞空间上接近；
+- 这个互作真的改变了细胞功能。
 
-Kupffer and endothelial changes are interesting but more complex. They may reflect transcriptional remodeling, cell-state shifts, injury response, dilution by infiltrating cells or annotation effects.
 
-The safest project-level conclusion is:
 
-> The data support exploratory evidence of APAP-induced immune microenvironment remodeling, but not a validated molecular mechanism.
-
-This boundary is part of the result, not a weakness to hide.

@@ -1,99 +1,104 @@
-# Note 3: Functional Comparison and Interpretation
+# 笔记 3： part1 功能比较与结果解释
 
-## Purpose
+## 为什么不把拟时序作为主线
 
-This note records the major scientific turn in the project: Stage 4 was changed from pseudotime analysis to APAP-Control functional comparison.
+这份笔记记录项目中最重要的一次路线调整：第四阶段从拟时序分析改为 APAP-Control 功能比较。
 
-The change was made because the data did not support a clean continuous trajectory across the whole myeloid compartment. The project therefore moved toward a more defensible question:
+原计划考虑使用 Monocle3 做拟时序。完成髓系二次聚类后，UMAP 结构显示髓系细胞主要分成几个相对独立的区域：
 
-> Which non-parenchymal cell types or myeloid subtypes show composition and functional-state changes after APAP treatment?
+- 中性粒细胞相关状态；
+- 驻留 Kupffer 细胞；
+- 单核来源巨噬细胞 / DC 样抗原呈递细胞。
 
-## Why Pseudotime Was Not Used as the Main Line
+这个结构更像不同细胞谱系或功能区域的分离，而不是一条连续分化路径。
 
-The original plan considered Monocle3 pseudotime analysis. After myeloid subclustering, the UMAP showed several separated structures:
+如果把全部髓系细胞强行连成一条拟时序，会得到一张看起来完整的图，但生物学方向很弱，起点选择也缺少足够依据。因此，拟时序不适合作为第四阶段主线。
 
-- neutrophil-related states;
-- Resident Kupffer cells;
-- monocyte-derived macrophage / DC-like antigen-presenting cells.
+因此，相比强行画拟时序，更合理的问题是：
 
-This structure looked more like separate lineages or functional compartments than one continuous differentiation path.
+> APAP 处理后，哪些非实质细胞类型或髓系亚群发生了组成和功能状态变化？
 
-Using all myeloid cells to force a single pseudotime trajectory would create an attractive figure, but the biological direction would be weak. Root selection would also be difficult to justify. Therefore, pseudotime was not used as the Stage 4 main analysis.
+## 第四阶段分析设计
 
-Pseudotime could still be considered later for a restricted lineage, such as neutrophil states only, but only if a clearer local continuum is observed.
+第四阶段使用三条证据线：
 
-## Stage 4 Analysis Design
+1. 组成变化  
+   在样本层面比较 Control 和 APAP 的细胞比例。
 
-Stage 4 used three evidence layers:
+2. 功能模块打分  
+   使用小型、可解释的基因集描述炎症、趋化、IFN、抗原呈递、Kupffer 稳态、吞噬清除和修复相关程序。
 
-1. Composition change  
-   Sample-level proportions were compared between Control and APAP.
+3. 伪批量差异表达  
+   在每个细胞群内部按样本聚合 counts，再使用 edgeR 比较 APAP vs Control。
 
-2. Functional module score  
-   Small interpretable gene sets were used to describe inflammatory, chemokine, IFN, antigen-presentation, Kupffer-resident, phagocytosis and repair-related programs.
+这样设计是因为 n = 3 vs 3 的样本量不足以支撑强统计结论，但仍然可以用于探索效应大小、方向一致性和候选功能变化。
 
-3. Pseudobulk differential expression  
-   Counts were aggregated at sample level within each cell group, then APAP vs Control was tested using edgeR.
+## 主要观察
 
-This design was chosen because n = 3 vs 3 is too small for strong claims, but still useful for exploratory effect-size and direction-based interpretation.
+### 中性粒细胞扩张
 
-## Key Findings
+炎症性、活化和成熟中性粒细胞相关群体在 APAP 样本中整体上升。这是本项目中最稳定的观察。
 
-### Neutrophil Expansion
+更稳妥的解释是“组成扩张”，而不是“群体内强烈转录重塑”。部分中性粒细胞群没有明显 FDR 显著 DEG，可能是样本量导致检验效力不足，也可能说明主要变化确实体现在比例层面。
 
-Inflammatory, activated and mature neutrophil-related populations increased in APAP samples. This was the most stable observation across the project.
+### Kupffer 细胞状态改变
 
-The strongest interpretation is composition expansion, not necessarily strong within-cell transcriptional remodeling. Some neutrophil groups had few or no FDR-significant DEGs, which may reflect limited sample size, low power or a real composition-dominant effect.
+驻留 Kupffer 细胞在髓系亚群中比例下降，但全局 Kupffer 细胞层面存在较多差异表达基因。
 
-### Kupffer Cell Reprogramming
+因此不能简单写成“Kupffer 细胞消失”。更稳妥的表述是：
 
-Resident Kupffer cell proportion decreased in the myeloid compartment, while global Kupffer cells showed many differentially expressed genes.
+> APAP 与 Kupffer 相关细胞的转录状态重编程有关，比例变化可能同时受到标记基因改变、组织损伤和中性粒细胞浸润稀释的影响。
 
-The safer interpretation is not "Kupffer cells disappear", but:
+### 内皮细胞变化
 
-> APAP is associated with Kupffer-related transcriptional remodeling, and apparent proportion changes may partly reflect marker shifts, tissue injury or dilution by infiltrating neutrophils.
+内皮细胞比例下降，并且存在伪批量差异表达信号。但上下调基因数量较均衡，功能模块方向也不完全一致。
 
-### Endothelial Change
+因此这里可以作为内皮损伤或状态扰动的候选线索，但不适合直接写成确定性的内皮激活或内皮丢失。
 
-Endothelial cells showed a decrease in proportion and clear pseudobulk DE signals. However, the direction was not simple: up- and down-regulated genes were balanced, and functional modules were variable across samples.
+### 抗原呈递髓系与单核来源巨噬 / DC 样群体
 
-This supports endothelial injury or state disturbance as a candidate signal, but not a confident claim of endothelial activation or loss.
+这些群体具有抗原呈递和免疫调节相关特征，但 APAP-Control 方向不够单一。
 
-### Antigen-Presenting Myeloid and Mo-Mac/DC-Like Cells
+更适合把它们作为探索性免疫状态变化，而不是项目主机制轴。
 
-These groups showed antigen-presentation and immune-regulatory features, but APAP-Control direction was not fully consistent across composition, module score and DE.
 
-They are better treated as exploratory immune-state findings rather than the main mechanistic axis.
 
-## Why CellChat Was Downgraded
+##  part2  为什么 CellChat 降级为补充筛查
 
-Stage 5 was not performed as a full CellChat discovery analysis. Instead, it was treated as targeted ligand-receptor screening.
+第五阶段没有做完整 CellChat 发现式分析，而是改成靶向配体-受体筛查。
 
-The reason is simple: ligand-receptor inference from scRNA-seq is hypothesis-generating. It does not directly measure physical interaction, protein abundance or functional signaling.
+原因是配体-受体推断本质上只能提出候选互作。它不能直接证明：
 
-The project therefore screened only a few axes suggested by Stage 4:
+- 蛋白水平真的上升；
+- 配体被分泌；
+- 受体被激活；
+- 两类细胞在空间上接近；
+- 这个互作真的产生功能后果。
 
-- neutrophil or activated neutrophil to endothelial;
-- Kupffer/macrophage to neutrophil or endothelial;
-- antigen-presenting myeloid to T/NK;
-- fibroblast/stellate to endothelial or myeloid.
+因此 Stage 5 只围绕 Stage 4 提示的少数方向进行筛查：
 
-Candidate pairs such as `Cxcl2-Cxcr2`, `Ccl6-Ccr1`, `Thbs1-Cd47` and `App-Cd74` were kept as weak supporting clues, not independent discoveries.
+- 中性粒细胞 / 活化中性粒细胞 → 内皮细胞；
+- Kupffer 细胞 / 巨噬细胞 → 中性粒细胞或内皮细胞；
+- 抗原呈递髓系细胞 → T/NK 细胞；
+- 成纤维 / 星状细胞 → 内皮细胞或髓系细胞。
 
-## Interpretation Rules
+`Cxcl2-Cxcr2`、`Ccl6-Ccr1`、`Thbs1-Cd47`、`App-Cd74` 等结果只作为候选线索，而不是独立机制发现。
 
-The project follows these boundaries:
 
-- n = 3 Control vs 3 APAP limits statistical power.
-- Cell proportion changes are relative, not absolute cell counts.
-- Module scores describe expression programs, not direct pathway activity.
-- Pseudobulk DE is more appropriate than treating cells as independent replicates, but it is still limited by sample number.
-- Cell communication analysis is candidate screening, not mechanism proof.
+## 解释原则
 
-## Final Position
+本项目结果需要遵守以下边界：
 
-The project supports the following cautious conclusion:
+- n = 3 Control vs 3 APAP，统计效力有限。
+- 细胞比例变化是相对比例，不等于绝对细胞数量变化。
+- 模块评分描述表达程序，不等于直接通路活性。
+- 伪批量差异分析比细胞级检验更合理，但仍受样本量限制。
+- 细胞通讯分析是候选筛查，不是机制证明。
 
-> APAP treatment is associated with remodeling of the liver non-parenchymal immune microenvironment, especially neutrophil expansion and Kupffer/endothelial/myeloid state changes. These findings are exploratory and should be treated as candidate directions for validation rather than established mechanisms.
+## 最终定位
 
-This interpretation is less dramatic than a full mechanistic story, but it is closer to what the data can actually support.
+本项目支持的谨慎结论是：
+
+> APAP 处理后，肝脏非实质免疫微环境出现重塑，尤其表现为中性粒细胞扩张，以及 Kupffer 细胞、内皮细胞和部分髓系状态变化。这些结果属于探索性发现，应作为后续实验验证的候选方向，而不是已经成立的机制结论。
+
+我的表述没有把故事讲满，但更接近数据真实能支持的范围。
